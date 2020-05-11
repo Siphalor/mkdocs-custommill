@@ -1,0 +1,443 @@
+@use "config.scss" as *;
+
+// MIXINS
+
+// These are taken from https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin flex($values) {
+  -webkit-box-flex: $values;
+  -moz-box-flex:  $values;
+  -webkit-flex:  $values;
+  -ms-flex:  $values;
+  flex:  $values;
+}
+
+@mixin order($val) {
+  -webkit-box-ordinal-group: $val;  
+  -moz-box-ordinal-group: $val;     
+  -ms-flex-order: $val;     
+  -webkit-order: $val;  
+  order: $val;
+}
+
+// UTILS
+
+.collapsing.width {
+	height: unset;
+	width: 0;
+	transition: width .35s ease;
+}
+
+// MAIN STUFF
+
+body {
+	background-color: lighten($gray-tone, 60%);
+}
+
+.navbar {
+	background-color: $main-color;
+	z-index: 2;
+	@media (min-width: 768px) {
+		height: 50px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+}
+
+.wm-top-frame {
+	display: none;
+}
+
+body.wm-top-page {
+	overflow: hidden;
+	& > .wm-page-content {
+		display: none;
+	}
+	@media (max-width: 767.98px) {
+		overflow: visible;
+	}
+}
+body:not(.wm-top-page) {
+	& > nav {
+		display: none;
+	}
+	#main-content {
+		display: none;
+	}
+}
+
+.wm-page-content {
+	max-width: 700px;
+	position: relative;
+	a:hover {
+		text-decoration: underline;
+	}
+	img {
+		max-width: 100%;
+		display: inline-block;
+		padding: 4px;
+		line-height: 1.428571429;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		margin: 20px auto 30px auto;
+	}
+}
+
+.wm-toc-pane {
+	position: absolute;
+	top: 0;
+	padding-top: 70px;
+	height: 100%;
+	min-width: 250px;
+	max-width: 250px;
+	z-index: 1;
+	background-color: lighten($gray-tone, 50%);
+	border-right: 1px solid $gray-tone;
+	border-bottom: 1px solid $gray-tone;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-bottom: 2rem;
+	margin-left: 0px;
+	transition: margin-left 0.3s;
+
+	@media (max-width: 767.98px) {
+		// On small screens the toc starts hidden
+		// Also a bit more left because of the shadow
+		margin-left: -260px;
+		height: auto;
+		box-shadow: 2px 3px 4px 0 $gray-tone;
+	}
+
+	// make links wider
+	li > a {
+		display: inline-block;
+		width: 100%;
+	}
+
+	// calculating all of the nesting paddings
+	$sel: '&';
+	@for $i from 0 through 6 {
+		// The folders should align with their contents because they're prefixed with their carets
+		#{$sel} ul > li.wm-toc-opener {
+			padding-left: calc(#{$toc-nest-ident} + #{($i + 1) * $toc-nest-ident});
+		}
+		#{$sel} ul:not(.wm-page-toc-tree) > li:not(.wm-toc-li-nested):not(.wm-toc-opener) {
+			padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
+		}
+		#{$sel} ul > li > ul.wm-page-toc-tree {
+			padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
+		}
+		$sel: selector-nest($sel, "li");
+	}
+
+	ul {
+		list-style: none;
+		margin-left: 0;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		&.wm-page-toc-tree {
+			li {
+				font-size: 80%;
+				border-left: 2px solid $main-color;
+			}
+		}
+	}
+
+	li {
+		cursor: default;
+
+		&:not(.wm-toc-li-nested) {
+			padding: 0.05em 0.5em;
+			&:hover:not(.wm-current) {
+				background-color: $gray-tone;
+			}
+		}
+		a:hover {
+			text-decoration: none;
+		}
+		&.wm-current {
+			background-color: $main-color;
+			color: white;
+			a {
+				color: white;
+			}
+		}
+		&.wm-toc-opener {
+			& > span {
+				&::before {
+					content: "\25B6 \FE0E";
+					font-family: initial;
+					display: inline-block;
+					vertical-align: middle;
+					margin-left: -$toc-nest-ident;
+					width: $toc-nest-ident;
+					transform: scale(0.5) translate(-50%, -10%);
+				}
+			}
+			&.wm-toc-open {
+				& > span::before {
+					content: "\25BC \FE0E";
+				}
+			}
+		}
+		&.wm-page-toc-opener {
+			a::after {
+				content: "\25B6 \FE0E";
+				font-family: initial;
+				display: inline-block;
+				vertical-align: middle;
+				text-align: right;
+				float: right;
+				transform: scale(0.5);
+			}
+			&.wm-page-toc-open a::after {
+				content: "\25BC \FE0E";
+			}
+		}
+	}
+
+	hr {
+		border-top: 1px solid $gray-tone;
+		margin: 10px $toc-nest-ident / 2;
+	}
+}
+
+.wm-content-pane {
+	height: 100%;
+	width: 100%;
+	z-index: 0;
+	/* required for iPhone to scroll the contained iframe */
+	-webkit-overflow-scrolling: touch;
+
+	padding-left: 0;
+	// resize content when toc is open on larger screens
+	@media (min-width: 768px) {
+		padding-left: 250px;
+		transition: padding-left 0.3s;
+		position: absolute;
+		top: 0;
+		padding-top: 50px;
+	}
+}
+
+.wm-toc-triggered {
+	& > .wm-toc-pane {
+		margin-left: -250px;
+		@media (max-width: 767.98px) {
+			margin-left: 0px;
+		}
+	}
+	.wm-content-pane {
+		padding-left: 0;
+	}
+}
+
+.wm-toc-pane, .wm-page-content, #mkdocs-search-results {
+	a, a:hover, a:focus, a:visited {
+		color: $main-color;
+		outline: none;
+		text-decoration: none;
+	}
+	a:hover, a:focus {
+		&.btn:not(.btn-link) {
+			color: white;
+		}
+	}
+}
+
+.wm-article {
+	width: 1px;
+	min-width: 100%;
+	height: 100%;
+	border: none;
+}
+
+// SEARCH STUFF
+
+#mkdocs-search-results {
+	.dropdown-item {
+		&:active, &:focus {
+			background-color: $main-color;
+			&, * {
+				color: white;
+			}
+		}
+		.dropdown-header {
+			padding: 0;
+			font-weight: 400;
+		}
+	}
+	&:not(.wm-search-page) {
+		width: 40rem;
+		overflow-y: auto;
+		overflow-x: hidden;
+		white-space: normal;
+		max-height: calc(100vh - 60px);
+		max-width: 90vw;
+		p {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-bottom: 0;
+		}
+	}
+	&.wm-search-page {
+		.dropdown-item {
+			white-space: normal;
+		}
+	}
+}
+
+.search-link {
+	font-size: 1.2rem;
+}
+
+.search-title {
+	font-weight: bold;
+	color: #337ab7;
+	padding-right: 1rem;
+}
+
+.search-text {
+	color: #666;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.search-text > b {
+	color: #000;
+}
+
+.wm-search-page {
+	list-style: none;
+	padding: 5px 0;
+}
+
+.wm-search-page > li {
+	padding: 1rem 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.wm-search-page .search-link {
+	font-size: inherit;
+}
+
+.wm-search-page .search-link:hover, .wm-search-page .search-link:active {
+	text-decoration: none;
+}
+
+.wm-search-page .search-link:hover .search-title {
+	text-decoration: underline;
+}
+
+/* The rest is taken from base.css from mkdocs. */
+
+.source-links {
+	float: right;
+}
+
+hr {
+	border-top: 1px solid $gray-tone;
+}
+
+pre, .rst-content tt {
+	max-width: 100%;
+	background: #fff;
+	border: solid 1px #e1e4e5;
+	color: #333;
+	overflow-x: auto;
+}
+
+code.code-large, .rst-content tt.code-large {
+	font-size: 90%;
+}
+
+code {
+	padding: 2px 5px;
+	background: #fff;
+	border: solid 1px #e1e4e5;
+	color: #333;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+pre code {
+	background: transparent;
+	border: none;
+	white-space: pre;
+	word-wrap: normal;
+	font-family: monospace,serif;
+	font-size: 12px;
+}
+
+a code {
+	color: #2FA4E7;
+}
+
+a:hover code, a:focus code {
+	color: #157AB5;
+}
+
+footer {
+	margin-bottom: 10px;
+	text-align: center;
+	font-weight: 200;
+	font-size: smaller;
+}
+
+.modal-dialog {
+	margin-top: 60px;
+}
+
+.headerlink {
+	font-size: 70%;
+	display: none;
+	padding-left: .5em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	&:hover .headerlink {
+		display: inline-block;
+	}
+}
+
+.admonition {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	text-align: left;
+}
+
+.admonition.note { /* csslint allow: adjoining-classes */
+	color: #3a87ad;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+
+.admonition.warning { /* csslint allow: adjoining-classes */
+	color: #c09853;
+	background-color: #fcf8e3;
+	border-color: #fbeed5;
+}
+
+.admonition.danger { /* csslint allow: adjoining-classes */
+	color: #b94a48;
+	background-color: #f2dede;
+	border-color: #eed3d7;
+}
+
+.admonition-title {
+	font-weight: bold;
+	text-align: left;
+}

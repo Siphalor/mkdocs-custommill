@@ -1,50 +1,42 @@
-<nav class="navbar wm-page-top-frame">
-  <div class="container-fluid wm-top-container">
-    {# Search input and button #}
-    <div class="wm-top-tool pull-right wm-vcenter">
-      <form class="dropdown wm-vcentered" id="wm-search-form" action="{{ base_url }}/search.html">
-        {# Button to show search-box on small screens #}
-        <button id="wm-search-show" class="btn btn-sm btn-default" type="submit"
-          ><i class="fa fa-search" aria-hidden="true"></i></button>
+<nav class="navbar navbar-expand-sm navbar-dark shadow">
+	<a class="navbar-brand mr-auto pb-0 pt-0" href="{{ name }}">
+		{% if config.extra.logo %}
+		<img src="{{ base_url }}/{{ config.extra.logo }}" />
+		{% endif %}
+		<span>{{ config.site_name }}</span>
+		{% if config.extra.version %}
+		<span class="badge badge-light ml-1">{{ config.extra.version }}</span>
+		{% endif %}
+	</a>
 
-        <div class="input-group input-group-sm wm-top-search">
-          <input type="text" name="q" class="form-control" id="mkdocs-search-query" placeholder="Search" autocomplete="off">
-          <span class="input-group-btn" role="search">
-            {# This button is hidden, but exists because an element with data-toggle attr is relied on by bootstrap. #}
-            <button class="btn btn-default dropdown-toggle collapse" data-toggle="dropdown" type="button"><span class="caret"></span></button>
-            <ul id="mkdocs-search-results" class="dropdown-menu dropdown-menu-right"></ul>
-            <button id="wm-search-go" class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-          </span>
-        </div>
-      </form>
-    </div>
+	<div class="d-flex">
+		{# Table-of-contents button #}
+		<button type="button" id="wm-toc-button" class="btn btn-sm btn-light mr-3"><i class="fa fa-th-list" aria-hidden="true"></i></button>
 
-    {# Table-of-contents button #}
-    <div class="wm-top-tool wm-vcenter pull-right wm-small-left">
-      <button id="wm-toc-button" type="button" class="btn btn-sm btn-default wm-vcentered"><i class="fa fa-th-list" aria-hidden="true"></i></button>
-    </div>
+		{# Search button #}
+		<button class="btn btn-sm btn-light d-md-none d-inline-block" type="button" id="wm-search-show" data-toggle="collapse" data-target="#wm-search-form"
+			><i class="fa fa-search" aria-hidden="true"></i>
+		</button>
+	</div>
+
+	<form class="form-inline collapse show" action="{{ base_url }}/search.html" id="wm-search-form">
+		<div class="input-group input-group-sm">
+			{# Search group #}
+			<input type="search" class="form-control" placeholder="Search" id="mkdocs-search-query" name="q" autocomplete="off">
+			<div class="input-group-append" role="search">
+				<div id="mkdocs-search-results" class="dropdown-menu dropdown-menu-right"></div>
+				<button class="btn btn-light" type="submit"
+					><i class="fa fa-search" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+	</form>
 
     {# Optional forward-back buttons #}
     {% if config.extra.history_buttons %}
-    <div class="wm-top-tool pull-right wm-vcenter">
-      <div class="btn-group wm-vcentered" role="group" aria-label="back">
-        <button id="hist-back" type="button" class="btn btn-sm btn-default"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
-        <button id="hist-fwd" type="button" class="btn btn-sm btn-default"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-      </div>
-    </div>
+	<div class="btn-group ml-3" role="group">
+		<button type="button" class="btn btn-sm btn-light" id="hist-back"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+		<button type="button" class="btn btn-sm btn-light" id="hist-fwd"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+	</div>
     {% endif %}
-
-    {# Logo and title #}
-    <a href="{{ name }}" class="wm-top-brand wm-top-link wm-vcenter">
-      {% if config.extra.logo %}
-        <img class="wm-top-logo" src="{{ base_url }}/{{ config.extra.logo }}"/>
-      {% endif %}
-      <div class="wm-top-title">
-        {{ config.site_name }}<br>
-        {% if config.extra.version %}
-          <span class="wm-top-version">{{ config.extra.version }}</span>
-        {% endif %}
-      </div>
-    </a>
-  </div>
 </nav>
