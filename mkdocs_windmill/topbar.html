@@ -1,25 +1,37 @@
 <nav class="navbar navbar-expand-sm navbar-dark shadow">
-	<a class="navbar-brand mr-auto pb-0 pt-0" href="{{ name }}">
-		{% if config.extra.logo %}
-		<img src="{{ base_url }}/{{ config.extra.logo }}" />
-		{% endif %}
-		<span>{{ config.site_name }}</span>
+	<div class="navbar-brand pb-0 pt-0">
+		<a href="{{ name }}">
+			{% if config.extra.logo %}
+			<img src="{{ base_url }}/{{ config.extra.logo }}" />
+			{% endif %}
+			<span>{{ config.site_name }}</span>
+		</a>
+		{%- block version %}
 		{% if config.extra.version %}
-		<span class="badge badge-light ml-1">{{ config.extra.version }}</span>
+		<span class="badge badge-light version-badge ml-1">{{ config.extra.version }}</span>
 		{% endif %}
-	</a>
-
-	<div class="d-flex">
-		{# Table-of-contents button #}
-		<button type="button" id="wm-toc-button" class="btn btn-sm btn-light mr-3"><i class="fa fa-th-list" aria-hidden="true"></i></button>
-
-		{# Search button #}
-		<button class="btn btn-sm btn-light d-md-none d-inline-block" type="button" id="wm-search-show" data-toggle="collapse" data-target="#wm-search-form"
-			><i class="fa fa-search" aria-hidden="true"></i>
-		</button>
+		{%- endblock %}
 	</div>
 
-	<form class="form-inline collapse show" action="{{ base_url }}/search.html" id="wm-search-form">
+	<div class="cm-navbar-group placeholding">
+		{# Table-of-contents button #}
+		<button type="button" id="wm-toc-button" class="btn btn-sm btn-light"><i class="fa fa-th-list" aria-hidden="true"></i></button>
+
+		{# Search button #}
+		<button class="btn btn-sm btn-light d-md-none d-inline-block ml-2" type="button" id="wm-search-show" data-toggle="collapse" data-target="#wm-search-form"
+			><i class="fa fa-search" aria-hidden="true"></i>
+		</button>
+
+		{# Optional forward-back buttons #}
+		{% if config.extra.history_buttons %}
+		<div class="btn-group ml-2" role="group">
+			<button type="button" class="btn btn-sm btn-light" id="hist-back"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-sm btn-light" id="hist-fwd"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+		</div>
+		{% endif %}
+	</div>
+
+	<form class="form-inline text-right collapse show" action="{{ base_url }}/search.html" id="wm-search-form">
 		<div class="input-group input-group-sm">
 			{# Search group #}
 			<input type="search" class="form-control" placeholder="Search" id="mkdocs-search-query" name="q" autocomplete="off">
@@ -31,12 +43,4 @@
 			</div>
 		</div>
 	</form>
-
-    {# Optional forward-back buttons #}
-    {% if config.extra.history_buttons %}
-	<div class="btn-group ml-3" role="group">
-		<button type="button" class="btn btn-sm btn-light" id="hist-back"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
-		<button type="button" class="btn btn-sm btn-light" id="hist-fwd"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-	</div>
-    {% endif %}
 </nav>

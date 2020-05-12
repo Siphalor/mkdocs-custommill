@@ -1,12 +1,12 @@
-site_name: 'Windmill MkDocs Theme'
-site_description: 'MkDocs theme focused on navigation and usability.'
-site_author: 'Dmitry S'
+site_name: 'CustomMill MkDocs Theme'
+site_description: 'Another iteration on the awesome Windmill theme for MkDocs'
+site_author: 'Siphalor'
 
-repo_url: https://github.com/gristlabs/mkdocs-windmill
+repo_url: https://github.com/Siphalor/mkdocs-custommill
 
 theme:
   name: null
-  custom_dir: mkdocs_windmill
+  custom_dir: custommill
   # Copy settings from mkdocs_theme.yml, which is ignored by custom_dir themes.
   static_templates: [404.html]
   search_index_only: true
@@ -29,7 +29,7 @@ markdown_extensions:
 
 extra:
   history_buttons: false
-  version: v1.0.4
+  version: v1.0.0
   nav_info:
   - type: twitter
     title: Siphalor

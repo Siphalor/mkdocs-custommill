@@ -210,6 +210,9 @@ function initMainWindow() {
 		$(this).toggleClass('wm-page-toc-open', showPageToc);
 		$(this).next('.wm-page-toc').collapse(showPageToc ? 'show' : 'hide');
 	});
+	$('.wm-toc-pane').on('click', 'a', function(e) {
+		$('.wm-toc-pane').toggleClass('wm-toc-triggered');
+	});
 
 	// Once the article loads in the side-pane, close the dropdown.
 	$('.wm-article').on('load', function() {

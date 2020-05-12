@@ -24,7 +24,7 @@
 		<link href="{{ base_url }}/css/bootstrap-4.4.1.min.css" rel="stylesheet">
 		<link href="{{ base_url }}/css/font-awesome-4.7.0.css" rel="stylesheet">
 		<link href="{{ base_url }}/css/base.css" rel="stylesheet">
-		<link rel="stylesheet" href="{{ base_url }}/css/highlight.css">
+		<link rel="stylesheet" href="{{ base_url }}/css/highlight-github.css">
 		{%- for path in extra_css %}
 		<link href="{{ path }}" rel="stylesheet">
 		{%- endfor %}
@@ -43,7 +43,7 @@
 		{% if is_top %}
 		<script src="{{ base_url }}/js/elasticlunr.min.js"></script>
 		{% endif %}
-		<base target="_top">
+		<base target="_top" />
 		{%- endblock %}
 
 		{%- block scripts %}
@@ -137,7 +137,7 @@ ga('send', 'pageview');
 			{%- endif %}
 		</div>
 
-		<footer class="container-fluid wm-page-content">
+		<footer class="container-fluid wm-page-content text-center small">
 			{%- block footer %}
 			{%- block repo %}
 			{%- if page and page.edit_url %}
@@ -152,7 +152,29 @@ ga('send', 'pageview');
 			{%- endblock %}
 
 			{%- if config.copyright %}<p>{{ config.copyright }}</p>{%- endif %}
-			<p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+			<details>
+				<summary>
+					Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using  <a href="https://github.com/Siphalor/mkdocs-custommill">CustomMill</a>.
+				</summary>
+				<h6 class="mt-2">Additional License and Usage Information</h6>
+				<ul>
+					<li>
+						CustomMill is based on the <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs, licensed under the <a href="https://github.com/gristlabs/mkdocs-windmill/blob/master/LICENSE">MIT License</a>
+					</li>
+					<li>
+						CustomMill includes <a href="https://getbootstrap.com">Bootstrap</a> version 4.4.1. This is available under the <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT License</a>.
+					</li>
+					<li>
+						CustomMill includes <a href="https://jquery.org">jQuery</a> version 3.2.1. This is available under the <a href="https://jquery.org/license">MIT License</a>.
+					</li>
+					<li>
+						Syntax highlighting is implemented via <a href="https://highlightjs.org">highlight.js</a> licensed under the BSD 3-Clause License and the included github styling made by Vasily Polovnyov.
+					</li>
+					<li>
+						Icons on this site are from <a href="https://fontawesome.com/v4.7.0/">FontAwesome v4.7.0</a> which is licensed as <a href="http://scripts.sil.org/OFL">SIL OFL 1.1</a>.
+					</li>
+				</ul>
+			</details>
 			{%- endblock %}
 		</footer>
 

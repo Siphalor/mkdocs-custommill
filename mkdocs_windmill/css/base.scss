@@ -2,29 +2,64 @@
 
 // MIXINS
 
-// These are taken from https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+// These are partially taken from https://css-tricks.com/snippets/css/a-guide-to-flexbox/ and https://autoprefixer.github.io/
 @mixin flexbox() {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
 }
 
-@mixin flex($values) {
-  -webkit-box-flex: $values;
-  -moz-box-flex:  $values;
-  -webkit-flex:  $values;
-  -ms-flex:  $values;
-  flex:  $values;
+@mixin flex($value) {
+	-webkit-box-flex: $value;
+	-moz-box-flex:  $value;
+	-webkit-flex:  $value;
+	-ms-flex:  $value;
+	flex:  $value;
 }
 
-@mixin order($val) {
-  -webkit-box-ordinal-group: $val;  
-  -moz-box-ordinal-group: $val;     
-  -ms-flex-order: $val;     
-  -webkit-order: $val;  
-  order: $val;
+@mixin justify-space-between {
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	-moz-box-pack: justify;
+	-ms-flex-pack: justify;
+	-ms-flex-pack: space-between;
+	justify-content: space-between;
+}
+
+@mixin justify-end {
+	-webkit-box-pack: end;
+	-webkit-justify-content: end;
+	-moz-box-pack: end;
+	-ms-flex-pack: end;
+	justify-content: end;
+}
+
+@mixin transform($value) {
+	-webkit-transform: $value;
+	-moz-transform: $value;
+	-ms-transform: $value;
+	-o-transform: $value;
+	transform: $value;
+}
+
+@mixin transition($value) {
+	-webkit-transition: $value;
+	-moz-transition: $value;
+	-o-transition: $value;
+	transition: $value;
+}
+
+@mixin text-overflow($value) {
+	-o-text-overflow: $value;
+	text-overflow: $value;
+}
+
+@mixin box-shadow($value) {
+	-webkit-box-shadow: $value;
+	-moz-box-shadow: $value;
+	box-shadow: $value;
 }
 
 // UTILS
@@ -32,18 +67,17 @@
 .collapsing.width {
 	height: unset;
 	width: 0;
-	transition: width .35s ease;
+	@include transition(width .35s ease);
 }
 
-// MAIN STUFF
-
-body {
-	background-color: lighten($gray-tone, 60%);
-}
+// NAVBAR
 
 .navbar {
 	background-color: $main-color;
 	z-index: 2;
+	padding: 0.25rem;
+	@include justify-space-between;
+
 	@media (min-width: 768px) {
 		height: 50px;
 		position: fixed;
@@ -51,6 +85,81 @@ body {
 		left: 0;
 		right: 0;
 	}
+	> * {
+		padding: 0.25rem;
+	}
+	.navbar-brand {
+		margin-right: 0;
+		a {
+			color: inherit;
+			text-decoration: inherit;
+		}
+		span.version-badge {
+			cursor: default;
+		}
+	}
+	.cm-navbar-group {
+		@include flexbox;
+		@include flex(0 0);
+		@include justify-end;
+		text-align: right;
+
+		&.placeholding {
+			@include flex(1 0);
+		}
+	}
+	#wm-search-form {
+		@include flex(2 2 100%);
+		@media (min-width: 768px) {
+			@include flex(0 0);
+		}
+		& > * {
+			@media (max-width: 767.98px) {
+				width: 100%;
+			}
+		}
+	}
+}
+
+// SEARCH STUFF
+
+#mkdocs-search-results {
+	.dropdown-item {
+		&:active, &:focus {
+			background-color: $main-color;
+			&, * {
+				color: white;
+			}
+		}
+		.dropdown-header {
+			padding: 0;
+			font-weight: 400;
+		}
+	}
+	&:not(.wm-search-page) {
+		width: 40rem;
+		overflow-y: auto;
+		overflow-x: hidden;
+		white-space: normal;
+		max-height: calc(100vh - 60px);
+		max-width: 90vw;
+		p {
+			overflow: hidden;
+			margin-bottom: 0;
+			@include text-overflow(ellipsis);
+		}
+	}
+	&.wm-search-page {
+		.dropdown-item {
+			white-space: normal;
+		}
+	}
+}
+
+// MAIN STUFF
+
+body {
+	background-color: lighten($gray-tone, 60%);
 }
 
 .wm-top-frame {
@@ -93,6 +202,34 @@ body:not(.wm-top-page) {
 	}
 }
 
+.wm-content-pane {
+	height: 100%;
+	width: 100%;
+	z-index: 0;
+	/* required for iPhone to scroll the contained iframe */
+	-webkit-overflow-scrolling: touch;
+
+	padding-left: 0;
+	// resize content when toc is open on larger screens
+	@media (min-width: 768px) {
+		padding-left: 250px;
+		@include transition(padding-left 0.3s);
+		position: absolute;
+		top: 0;
+		padding-top: 50px;
+	}
+}
+
+.wm-article {
+	width: 1px;
+	min-width: 100%;
+	height: 100%;
+	border: none;
+}
+
+
+// TOC PANE
+
 .wm-toc-pane {
 	position: absolute;
 	top: 0;
@@ -108,14 +245,14 @@ body:not(.wm-top-page) {
 	padding-right: 1rem;
 	padding-bottom: 2rem;
 	margin-left: 0px;
-	transition: margin-left 0.3s;
+	@include transition(margin-left 0.3s);
 
 	@media (max-width: 767.98px) {
 		// On small screens the toc starts hidden
 		// Also a bit more left because of the shadow
 		margin-left: -260px;
 		height: auto;
-		box-shadow: 2px 3px 4px 0 $gray-tone;
+		@include box-shadow(2px 3px 4px 0 $gray-tone);
 	}
 
 	// make links wider
@@ -155,7 +292,7 @@ body:not(.wm-top-page) {
 	}
 
 	li {
-		cursor: default;
+		cursor: pointer;
 
 		&:not(.wm-toc-li-nested) {
 			padding: 0.05em 0.5em;
@@ -182,7 +319,7 @@ body:not(.wm-top-page) {
 					vertical-align: middle;
 					margin-left: -$toc-nest-ident;
 					width: $toc-nest-ident;
-					transform: scale(0.5) translate(-50%, -10%);
+					@include transform(scale(0.5) translate(-50%, -10%));
 				}
 			}
 			&.wm-toc-open {
@@ -199,7 +336,7 @@ body:not(.wm-top-page) {
 				vertical-align: middle;
 				text-align: right;
 				float: right;
-				transform: scale(0.5);
+				@include transform(scale(0.5) translate(-50%, -10%));
 			}
 			&.wm-page-toc-open a::after {
 				content: "\25BC \FE0E";
@@ -208,29 +345,11 @@ body:not(.wm-top-page) {
 	}
 
 	hr {
-		border-top: 1px solid $gray-tone;
 		margin: 10px $toc-nest-ident / 2;
 	}
 }
 
-.wm-content-pane {
-	height: 100%;
-	width: 100%;
-	z-index: 0;
-	/* required for iPhone to scroll the contained iframe */
-	-webkit-overflow-scrolling: touch;
-
-	padding-left: 0;
-	// resize content when toc is open on larger screens
-	@media (min-width: 768px) {
-		padding-left: 250px;
-		transition: padding-left 0.3s;
-		position: absolute;
-		top: 0;
-		padding-top: 50px;
-	}
-}
-
+// This is neccessary because on small screens the toc is hidden by default but on large screens it should be visible
 .wm-toc-triggered {
 	& > .wm-toc-pane {
 		margin-left: -250px;
@@ -256,95 +375,17 @@ body:not(.wm-top-page) {
 	}
 }
 
-.wm-article {
-	width: 1px;
-	min-width: 100%;
-	height: 100%;
-	border: none;
-}
+// FOOTER
 
-// SEARCH STUFF
-
-#mkdocs-search-results {
-	.dropdown-item {
-		&:active, &:focus {
-			background-color: $main-color;
-			&, * {
-				color: white;
-			}
-		}
-		.dropdown-header {
-			padding: 0;
-			font-weight: 400;
-		}
-	}
-	&:not(.wm-search-page) {
-		width: 40rem;
-		overflow-y: auto;
-		overflow-x: hidden;
-		white-space: normal;
-		max-height: calc(100vh - 60px);
-		max-width: 90vw;
-		p {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			margin-bottom: 0;
-		}
-	}
-	&.wm-search-page {
-		.dropdown-item {
-			white-space: normal;
-		}
+footer {
+	details ul {
+		padding-left: 0;
+		list-style: '- ';
 	}
 }
 
-.search-link {
-	font-size: 1.2rem;
-}
-
-.search-title {
-	font-weight: bold;
-	color: #337ab7;
-	padding-right: 1rem;
-}
-
-.search-text {
-	color: #666;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.search-text > b {
-	color: #000;
-}
-
-.wm-search-page {
-	list-style: none;
-	padding: 5px 0;
-}
-
-.wm-search-page > li {
-	padding: 1rem 0;
-	border-bottom: 1px solid #ccc;
-}
-
-.wm-search-page .search-link {
-	font-size: inherit;
-}
-
-.wm-search-page .search-link:hover, .wm-search-page .search-link:active {
-	text-decoration: none;
-}
-
-.wm-search-page .search-link:hover .search-title {
-	text-decoration: underline;
-}
-
-/* The rest is taken from base.css from mkdocs. */
-
-.source-links {
-	float: right;
-}
+// GENERAL STYLES
+// partially taken from the mkdocs standard css
 
 hr {
 	border-top: 1px solid $gray-tone;
@@ -353,7 +394,7 @@ hr {
 pre, .rst-content tt {
 	max-width: 100%;
 	background: #fff;
-	border: solid 1px #e1e4e5;
+	border: solid 1px $gray-tone;
 	color: #333;
 	overflow-x: auto;
 }
@@ -365,7 +406,7 @@ code.code-large, .rst-content tt.code-large {
 code {
 	padding: 2px 5px;
 	background: #fff;
-	border: solid 1px #e1e4e5;
+	border: solid 1px $gray-tone;
 	color: #333;
 	white-space: pre-wrap;
 	word-wrap: break-word;
@@ -374,25 +415,7 @@ code {
 pre code {
 	background: transparent;
 	border: none;
-	white-space: pre;
 	word-wrap: normal;
-	font-family: monospace,serif;
-	font-size: 12px;
-}
-
-a code {
-	color: #2FA4E7;
-}
-
-a:hover code, a:focus code {
-	color: #157AB5;
-}
-
-footer {
-	margin-bottom: 10px;
-	text-align: center;
-	font-weight: 200;
-	font-size: smaller;
 }
 
 .modal-dialog {
