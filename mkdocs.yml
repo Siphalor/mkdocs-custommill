@@ -6,15 +6,15 @@ repo_url: https://github.com/Siphalor/mkdocs-custommill
 
 theme:
   name: null
-  custom_dir: custommill
+  custom_dir: mkdocs_custommill
   # Copy settings from mkdocs_theme.yml, which is ignored by custom_dir themes.
-  static_templates: [404.html]
+  static_templates: [404.html, index.html]
   search_index_only: true
   include_search_page: true
 
 # This should be renamed to nav for mkdocs 1.0+
 pages:
-- Usage: index.md
+- Usage: usage.md
 - Customization: customization.md
 - Samples:
   - Sample Page A: sample-a.md
@@ -30,6 +30,7 @@ markdown_extensions:
 extra:
   history_buttons: false
   version: v1.0.0
+  home: usage
   nav_info:
   - type: twitter
     title: Siphalor

@@ -160,27 +160,11 @@
 
 body {
 	background-color: lighten($gray-tone, 60%);
-}
-
-.wm-top-frame {
-	display: none;
-}
-
-body.wm-top-page {
-	overflow: hidden;
-	& > .wm-page-content {
-		display: none;
-	}
-	@media (max-width: 767.98px) {
-		overflow: visible;
-	}
-}
-body:not(.wm-top-page) {
-	& > nav {
-		display: none;
-	}
-	#main-content {
-		display: none;
+	&.outer-page {
+		overflow: hidden;
+		@media (max-width: 767.98px) {
+			overflow: visible;
+		}
 	}
 }
 
@@ -233,7 +217,6 @@ body:not(.wm-top-page) {
 .wm-toc-pane {
 	position: absolute;
 	top: 0;
-	padding-top: 70px;
 	height: 100%;
 	min-width: 250px;
 	max-width: 250px;
@@ -241,9 +224,7 @@ body:not(.wm-top-page) {
 	background-color: lighten($gray-tone, 50%);
 	border-right: 1px solid $gray-tone;
 	border-bottom: 1px solid $gray-tone;
-	padding-left: 1rem;
-	padding-right: 1rem;
-	padding-bottom: 2rem;
+	padding: 70px 1rem 2rem;
 	margin-left: 0px;
 	@include transition(margin-left 0.3s);
 
@@ -378,6 +359,7 @@ body:not(.wm-top-page) {
 // FOOTER
 
 footer {
+	padding-bottom: 2rem;
 	details ul {
 		padding-left: 0;
 		list-style: '- ';
@@ -424,13 +406,13 @@ pre code {
 
 .headerlink {
 	font-size: 70%;
-	display: none;
 	padding-left: .5em;
+	visibility: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
 	&:hover .headerlink {
-		display: inline-block;
+		visibility: visible;
 	}
 }
 

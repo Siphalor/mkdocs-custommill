@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		{% set is_top = (page and page.is_homepage) and not force_plain_page %}
 		{% set base_url = base_url or "." %}
+		{% set is_home = page.url|url == (config.extra.home or "home")|url %}
 
 		{%- block site_meta %}
 		<meta charset="utf-8">
@@ -49,7 +49,8 @@
 		{%- block scripts %}
 		<script>
 			var base_url = '{{ base_url }}';
-			var is_top_frame = {% if is_top %}(window === window.parent){% else %}false{% endif %};
+			var home_url = '{{ base_url }}/{{ config.extra.home or "home" }}';
+			var is_outer_page = {{ 'true' if is_top else 'false' }};
 			{%- if page %}
 			{# Include the first two levels of TOC data as a JS object, to be rendered in top frame #}
 			var pageToc = [
@@ -89,11 +90,7 @@ ga('send', 'pageview');
 		{%- block extrahead %} {% endblock %}
 	</head>
 
-	<body>
-		<script>
-			if (is_top_frame) { $('body').addClass('wm-top-page'); }
-		</script>
-
+	<body class="{{ 'outer-page' if is_top else 'inner-page' }}">
 		{#
 		# Code for the top frame. It should ideally be separate from the index page (which is likely
 		# possible once theme_config is released with mkdocs 1.0).
@@ -104,11 +101,11 @@ ga('send', 'pageview');
 		<div id="main-content" class="wm-page-top-frame">
 			{% include 'nav-pane.html' %}
 			<div class="wm-content-pane">
-				<iframe class="wm-article" name="article"></iframe>
+				<iframe class="wm-article" name="article" src="{{ base_url }}/{{ config.extra.home or "home" }}"></iframe>
 			</div>
 		</div>
 
-		{%- endif -%}
+		{%- else -%}
 
 		{# Code for the main template for all content pages. #}
 
@@ -178,6 +175,7 @@ ga('send', 'pageview');
 			{%- endblock %}
 		</footer>
 
+		{% endif %}
 	</body>
 </html>
 {%- if is_top %}
