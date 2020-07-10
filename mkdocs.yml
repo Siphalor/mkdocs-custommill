@@ -8,7 +8,7 @@ theme:
   name: null
   custom_dir: mkdocs_custommill
   # Copy settings from mkdocs_theme.yml, which is ignored by custom_dir themes.
-  static_templates: [404.html, index.html]
+  static_templates: [404.html, index.html, css/base.css]
   search_index_only: true
   include_search_page: true
 
@@ -35,3 +35,7 @@ extra:
   - type: twitter
     title: Siphalor
     url: https://twitter.com/Siphalor
+  css:
+    main_color: "#bb0000"
+    gray: "#e0e0e0"
+    lighter_gray: "#eeeeee"

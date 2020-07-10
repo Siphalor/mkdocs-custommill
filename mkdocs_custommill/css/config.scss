@@ -1,4 +1,9 @@
-$main-color: #b00;
-$gray-tone: #e0e0e0;
+// Defaults
+// $main-color: #b00;
+// $gray: #e0e0e0;
+// $lighter-gray: #eeeeee;
 $toc-nest-ident: 12px;
 
+$main-color: #{ "{{ config.extra.css.main_color }}" };
+$gray: #{ "{{ config.extra.css.gray }}" };
+$lighter-gray: #{ "{{ config.extra.css.lighter_gray }}" };

@@ -159,7 +159,7 @@
 // MAIN STUFF
 
 body {
-	background-color: lighten($gray-tone, 60%);
+	background-color: $lighter-gray;
 	&.outer-page {
 		overflow: hidden;
 		@media (max-width: 767.98px) {
@@ -221,9 +221,9 @@ body {
 	min-width: 250px;
 	max-width: 250px;
 	z-index: 1;
-	background-color: lighten($gray-tone, 50%);
-	border-right: 1px solid $gray-tone;
-	border-bottom: 1px solid $gray-tone;
+	background-color: $lighter-gray;
+	border-right: 1px solid $gray;
+	border-bottom: 1px solid $gray;
 	padding: 70px 1rem 2rem;
 	margin-left: 0px;
 	@include transition(margin-left 0.3s);
@@ -233,7 +233,7 @@ body {
 		// Also a bit more left because of the shadow
 		margin-left: -260px;
 		height: auto;
-		@include box-shadow(2px 3px 4px 0 $gray-tone);
+		@include box-shadow(2px 3px 4px 0 $gray);
 	}
 
 	// make links wider
@@ -278,7 +278,7 @@ body {
 		&:not(.wm-toc-li-nested) {
 			padding: 0.05em 0.5em;
 			&:hover:not(.wm-current) {
-				background-color: $gray-tone;
+				background-color: $gray;
 			}
 		}
 		a:hover {
@@ -370,13 +370,13 @@ footer {
 // partially taken from the mkdocs standard css
 
 hr {
-	border-top: 1px solid $gray-tone;
+	border-top: 1px solid $gray;
 }
 
 pre, .rst-content tt {
 	max-width: 100%;
 	background: #fff;
-	border: solid 1px $gray-tone;
+	border: solid 1px $gray;
 	color: #333;
 	overflow-x: auto;
 }
@@ -388,7 +388,7 @@ code.code-large, .rst-content tt.code-large {
 code {
 	padding: 2px 5px;
 	background: #fff;
-	border: solid 1px $gray-tone;
+	border: solid 1px $gray;
 	color: #333;
 	white-space: pre-wrap;
 	word-wrap: break-word;

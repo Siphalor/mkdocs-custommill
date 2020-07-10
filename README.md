@@ -26,12 +26,6 @@ To use in `mkdocs.yml`:
 theme: custommill
 ```
 
-Note that it's important for there to exist a homepage, e.g. a top-level root element in mkdocs 1.0+:
-``` yaml
-nav:
-  - Home: index.md
-```
-
 ## Demo and documentation
 
 More details generated from the included docs are coming soon ;)
