@@ -12,7 +12,7 @@
 		
 		<link rel="shortcut icon" href="../img/favicon.ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-		<title>Customization - CustomMill MkDocs Theme</title>
+		<title>Usage - CustomMill MkDocs Theme</title>
 		<link href="../css/bootstrap-4.4.1.min.css" rel="stylesheet">
 		<link href="../css/font-awesome-4.7.0.css" rel="stylesheet">
 		<link href="../css/base.css" rel="stylesheet">
@@ -34,8 +34,10 @@
 			var is_outer_page = false;
 			
 			var pageToc = [
-				{title: "Customization", url: "#_top", children: [
-					{title: "Extra configuration options", url: "#extra-configuration-options" },
+				{title: "Windmill theme", url: "#_top", children: [
+					{title: "About", url: "#about" },
+					{title: "Installation", url: "#installation" },
+					{title: "Usage", url: "#usage" },
 				]},
 			];
 
@@ -56,23 +58,13 @@
 
 
 <div class="row pt-2">
-	<div class="col-sm text-center text-sm-left">
-		<a href="../usage/" class="btn btn-sm btn-outline-dark">
-			<i class="fa fa-chevron-left" aria-hidden="true"></i>
-			Previous
-		</a>
-		<a href="../usage/" class="btn btn-sm btn-link">
-			Usage
-		</a>
-	</div>
-	
 
 	
 	<div class="col-sm text-center text-sm-right">
-		<a href="../sample-a/" class="btn btn-sm btn-link">
-			Sample Page A
+		<a href="../customization/" class="btn btn-sm btn-link">
+			Customization
 		</a>
-		<a href="../sample-a/" class="btn btn-sm btn-outline-dark">
+		<a href="../customization/" class="btn btn-sm btn-outline-dark">
 			Next
 			<i class="fa fa-chevron-right" aria-hidden="true"></i>
 		</a>
@@ -82,18 +74,43 @@
 
 			
 
-			<h1 id="customization">Customization<a class="headerlink" href="#customization" title="Permanent link">#</a></h1>
-<p>For details about standard mkdocs options, see <a href="http://www.mkdocs.org/user-guide/configuration/">MkDocs Configuration</a>.</p>
-<p>In addition, the Windmill theme supports a few additional options, which may be
-listed under the <code>extra:</code> key of <code>mkdocs.yml</code>.</p>
-<h2 id="extra-configuration-options">Extra configuration options<a class="headerlink" href="#extra-configuration-options" title="Permanent link">#</a></h2>
-<p><code>extra.logo</code>: Path to a logo to include in the top bar next to the site name.</p>
-<p><code>extra.version</code>: Version number to include right under the site name.</p>
-<p><code>extra.article_nav_top</code>: Set to <code>false</code> to hide the Previous/Next navigation buttons above article contents.</p>
-<p><code>extra.article_nav_bottom</code>: Set to <code>false</code> to hide the Previous/Next navigation buttons below article contents.</p>
-<p><code>extra.history_buttons</code>: Include back/forward buttons in the top bar. This is
-  useful when the documentation site is included into a bare browser, e.g. into
-  an Electron-based application.</p>
+			<h1 id="windmill-theme">Windmill theme<a class="headerlink" href="#windmill-theme" title="Permanent link">#</a></h1>
+<h2 id="about">About<a class="headerlink" href="#about" title="Permanent link">#</a></h2>
+<p>Windmill theme focuses on clean usable navigation for large documentation
+projects. It retains the state of the menu of pages and folders across page
+transitions, by keeping navigation to an iframe.</p>
+<p>It also implements a versatile search, featuring term highlighting, and both a
+quick dropdown and a full-page option that allows the user to come back to
+search results.</p>
+<p>Within pages, it uses the default mkdocs theme, including syntax highlighting.</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">#</a></h2>
+<p>Install the Windmill theme using <code>pip</code>:</p>
+<pre><code class="sh">pip install mkdocs-windmill
+</code></pre>
+
+<p>To install and get started with <code>mkdocs</code>, follow <a href="http://www.mkdocs.org/#installation">MkDocs documentation</a>.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
+<p>To use the Windmill theme installed via <code>pip</code>, add this to your <code>mkdocs.yml</code>:</p>
+<pre><code class="yaml">theme: 'windmill'
+</code></pre>
+
+<p>If you cloned Windmill from GitHub:</p>
+<pre><code class="yaml">theme:
+  name: null
+  custom_dir: '{INSTALL_DIR}/mkdocs_windmill'
+  # Copy settings from mkdocs_theme.yml, which is ignored by custom_dir themes.
+  static_templates: [404.html]
+  search_index_only: true
+  include_search_page: true
+</code></pre>
+
+<p>Note that it's important for there to exist a homepage, e.g. a top-level root element in mkdocs 1.0+:</p>
+<pre><code class="yaml">nav:
+  - Home: index.md
+</code></pre>
+
+<p>See <a href="../customization/">Customization</a> for a few extra configuration options
+supported by the Windmill theme.</p>
 
 			<br>
 			
@@ -104,23 +121,13 @@ listed under the <code>extra:</code> key of <code>mkdocs.yml</code>.</p>
 
 
 <div class="row pt-2">
-	<div class="col-sm text-center text-sm-left">
-		<a href="../usage/" class="btn btn-sm btn-outline-dark">
-			<i class="fa fa-chevron-left" aria-hidden="true"></i>
-			Previous
-		</a>
-		<a href="../usage/" class="btn btn-sm btn-link">
-			Usage
-		</a>
-	</div>
-	
 
 	
 	<div class="col-sm text-center text-sm-right">
-		<a href="../sample-a/" class="btn btn-sm btn-link">
-			Sample Page A
+		<a href="../customization/" class="btn btn-sm btn-link">
+			Customization
 		</a>
-		<a href="../sample-a/" class="btn btn-sm btn-outline-dark">
+		<a href="../customization/" class="btn btn-sm btn-outline-dark">
 			Next
 			<i class="fa fa-chevron-right" aria-hidden="true"></i>
 		</a>
@@ -133,7 +140,7 @@ listed under the <code>extra:</code> key of <code>mkdocs.yml</code>.</p>
 
 		<footer class="container-fluid wm-page-content text-center small">
 			<p>
-			<a href="https://github.com/Siphalor/mkdocs-custommill/edit/master/docs/customization.md"><i class="fa fa-github"></i>
+			<a href="https://github.com/Siphalor/mkdocs-custommill/edit/master/docs/usage.md"><i class="fa fa-github"></i>
 Edit on GitHub</a>
 			</p>
 			<details>

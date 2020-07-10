@@ -1,51 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  
-  
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta name="author" content="Dmitry S">
-    
-    <link rel="shortcut icon" href="//img/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Windmill MkDocs Theme</title>
-    <link href="//css/bootstrap-3.3.7.min.css" rel="stylesheet">
-    <link href="//css/font-awesome-4.7.0.css" rel="stylesheet">
-    <link href="//css/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="//css/highlight.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+	<head>
+		
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<meta name="author" content="Siphalor">
+		
+		<link rel="shortcut icon" href="//img/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<title>CustomMill MkDocs Theme</title>
+		<link href="//css/bootstrap-4.4.1.min.css" rel="stylesheet">
+		<link href="//css/font-awesome-4.7.0.css" rel="stylesheet">
+		<link href="//css/base.css" rel="stylesheet">
+		<link rel="stylesheet" href="//css/highlight-github.css">
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
 
-    <script src="//js/jquery-3.2.1.min.js"></script>
-    <script src="//js/bootstrap-3.3.7.min.js"></script>
-    <script src="//js/highlight.pack.js"></script>
-    
-    <base target="_top">
-    <script>
-      var base_url = '/';
-      var is_top_frame = false;
-        var page_toc = null;
+		<script src="//js/jquery-3.2.1.min.js"></script>
+		<script src="//js/bootstrap-4.4.1.min.js"></script>
+		<script src="//js/highlight.pack.js"></script>
+		
+		<base target="_top" />
+		<script>
+			var base_url = '/';
+			var home_url = '//usage';
+			var is_outer_page = false;
+			var page_toc = null;
 
-    </script>
-    <script src="//js/base.js"></script> 
-</head>
+		</script>
+		<script src="//js/base.js"></script> 
+	</head>
 
-<body>
-<script>
-if (is_top_frame) { $('body').addClass('wm-top-page'); }
-</script>
+	<body class="inner-page">
+		
 
-
-
-<div class="container-fluid wm-page-content">
-  <a name="_top"></a>
-    
+		<div class="container-fluid wm-page-content">
+			<a name="_top"></a>
+			
 
 
   <h2 style="text-align: center">404</h2>
@@ -53,19 +50,42 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
 
 
-  <br>
-    
+			<br>
+			
 
-    <br>
-</div>
+			<br>
+		</div>
 
-<footer class="container-fluid wm-page-content">
-      <p>
-        <a href="https://github.com/gristlabs/mkdocs-windmill/"><i class="fa fa-github"></i>
+		<footer class="container-fluid wm-page-content text-center small">
+			<p>
+			<a href="https://github.com/Siphalor/mkdocs-custommill/"><i class="fa fa-github"></i>
 GitHub</a>
-      </p>
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
-</footer>
+			</p>
+			<details>
+				<summary>
+					Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using  <a href="https://github.com/Siphalor/mkdocs-custommill">CustomMill</a>.
+				</summary>
+				<h6 class="mt-2">Additional License and Usage Information</h6>
+				<ul>
+					<li>
+						CustomMill is based on the <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs, licensed under the <a href="https://github.com/gristlabs/mkdocs-windmill/blob/master/LICENSE">MIT License</a>
+					</li>
+					<li>
+						CustomMill includes <a href="https://getbootstrap.com">Bootstrap</a> version 4.4.1. This is available under the <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT License</a>.
+					</li>
+					<li>
+						CustomMill includes <a href="https://jquery.org">jQuery</a> version 3.2.1. This is available under the <a href="https://jquery.org/license">MIT License</a>.
+					</li>
+					<li>
+						Syntax highlighting is implemented via <a href="https://highlightjs.org">highlight.js</a> licensed under the BSD 3-Clause License and the included github styling made by Vasily Polovnyov.
+					</li>
+					<li>
+						Icons on this site are from <a href="https://fontawesome.com/v4.7.0/">FontAwesome v4.7.0</a> which is licensed as <a href="http://scripts.sil.org/OFL">SIL OFL 1.1</a>.
+					</li>
+				</ul>
+			</details>
+		</footer>
 
-</body>
+		
+	</body>
 </html>
