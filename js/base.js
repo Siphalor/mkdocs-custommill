@@ -325,15 +325,10 @@ function onIframeLoad() {
  * Hides a bootstrap collapsible element, and removes it from DOM once hidden.
  */
 function collapseAndRemove(collapsibleElem) {
-	if (!collapsibleElem.hasClass('in')) {
-		// If the element is already hidden, just remove it immediately.
+	collapsibleElem.on('hidden.bs.collapse', function() {
 		collapsibleElem.remove();
-	} else {
-		collapsibleElem.on('hidden.bs.collapse', function() {
-			collapsibleElem.remove();
-		})
-			.collapse('hide');
-	}
+	})
+	.collapse('hide');
 }
 
 function renderPageToc(parentElem, pageUrl, pageToc) {
