@@ -35,7 +35,8 @@
 			
 			var pageToc = [
 				{title: "Customization", url: "#_top", children: [
-					{title: "Extra configuration options", url: "#extra-configuration-options" },
+					{title: "theme configuration options", url: "#theme-configuration-options" },
+					{title: "extra configuration options", url: "#extra-configuration-options" },
 				]},
 			];
 
@@ -84,23 +85,49 @@
 
 			<h1 id="customization">Customization<a class="headerlink" href="#customization" title="Permanent link">#</a></h1>
 <p>For details about standard mkdocs options, see <a href="http://www.mkdocs.org/user-guide/configuration/">MkDocs Configuration</a>.</p>
-<p>In addition, the Windmill theme supports a few additional options, which may be
-listed under the <code>extra:</code> key of <code>mkdocs.yml</code>.</p>
-<h2 id="extra-configuration-options">Extra configuration options<a class="headerlink" href="#extra-configuration-options" title="Permanent link">#</a></h2>
-<p><code>extra.logo</code>: Path to a logo to include in the top bar next to the site name.</p>
-<p><code>extra.version</code>: Version number to include right under the site name.</p>
-<p><code>extra.article_nav_top</code>: Set to <code>false</code> to hide the Previous/Next navigation buttons above article contents.</p>
-<p><code>extra.article_nav_bottom</code>: Set to <code>false</code> to hide the Previous/Next navigation buttons below article contents.</p>
-<p><code>extra.history_buttons</code>: Include back/forward buttons in the top bar. This is
+<p>In addition, this theme supports a few additional options.</p>
+<h2 id="theme-configuration-options"><code>theme</code> configuration options<a class="headerlink" href="#theme-configuration-options" title="Permanent link">#</a></h2>
+<p>Located on the <code>theme</code> key in your <code>mkdocs.yml</code>:</p>
+<ul>
+<li>
+<p><code>main_color</code>: Sets the main theme color of the site. This should be a somewhat dark color as it is also used for links.</p>
+</li>
+<li>
+<p><code>gray</code>: Sets the gray tone used for some borders.</p>
+</li>
+<li>
+<p><code>lighter_gray</code>: Sets the gray tone used for various backgrounds.</p>
+</li>
+</ul>
+<h2 id="extra-configuration-options"><code>extra</code> configuration options<a class="headerlink" href="#extra-configuration-options" title="Permanent link">#</a></h2>
+<p>Located on the <code>extra</code> key in your <code>mkdocs.yml</code>:</p>
+<ul>
+<li>
+<p><code>logo</code>: Path to a logo to include in the top bar next to the site name.</p>
+</li>
+<li>
+<p><code>version</code>: Version number to include right under the site name.</p>
+</li>
+<li>
+<p><code>article_nav_top</code>: Set to <code>false</code> to hide the Previous/Next navigation buttons above article contents.</p>
+</li>
+<li>
+<p><code>article_nav_bottom</code>: Set to <code>false</code> to hide the Previous/Next navigation buttons below article contents.</p>
+</li>
+<li>
+<p><code>history_buttons</code>: Include back/forward buttons in the top bar. This is
   useful when the documentation site is included into a bare browser, e.g. into
   an Electron-based application.</p>
-<p><code>extra.css.main_color</code>: Sets the main theme color of the site. This should be a somewhat dark color as it is also used for links.</p>
-<p><code>extra.css.gray</code>: Sets the gray tone used for some borders.</p>
-<p><code>extra.css.lighter_gray</code>: Sets the gray tone used for various backgrounds.</p>
-<p><code>extra.nav_info</code>: This defines the custom links above the table of contents. It is a list of objects with the following fields:
-- <code>type</code>: This indicates the to what you link by using the given value as a Fontawesome icon. Possible values include <code>github</code>, <code>twitter</code>, <code>facebook</code>, <code>slack</code> and a lot more!
-- <code>title</code>: This sets the text that is being displayed
-- <code>url</code>: Sets the links href</p>
+</li>
+<li>
+<p><code>nav_info</code>: This defines the custom links above the table of contents. It is a list of objects with the following fields:</p>
+<ul>
+<li><code>type</code>: This indicates the to what you link by using the given value as a Fontawesome icon. Possible values include <code>github</code>, <code>twitter</code>, <code>facebook</code>, <code>slack</code> and a lot more!</li>
+<li><code>title</code>: This sets the text that is being displayed</li>
+<li><code>url</code>: Sets the links href</li>
+</ul>
+</li>
+</ul>
 
 			<br>
 			

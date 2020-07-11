@@ -34,7 +34,7 @@
 			var is_outer_page = false;
 			
 			var pageToc = [
-				{title: "Windmill theme", url: "#_top", children: [
+				{title: "CustomMill theme", url: "#_top", children: [
 					{title: "About", url: "#about" },
 					{title: "Installation", url: "#installation" },
 					{title: "Usage", url: "#usage" },
@@ -74,43 +74,40 @@
 
 			
 
-			<h1 id="windmill-theme">Windmill theme<a class="headerlink" href="#windmill-theme" title="Permanent link">#</a></h1>
+			<h1 id="custommill-theme">CustomMill theme<a class="headerlink" href="#custommill-theme" title="Permanent link">#</a></h1>
 <h2 id="about">About<a class="headerlink" href="#about" title="Permanent link">#</a></h2>
-<p>Windmill theme focuses on clean usable navigation for large documentation
-projects. It retains the state of the menu of pages and folders across page
-transitions, by keeping navigation to an iframe.</p>
-<p>It also implements a versatile search, featuring term highlighting, and both a
-quick dropdown and a full-page option that allows the user to come back to
-search results.</p>
+<p>CustomMill theme focuses on clean usable navigation for large documentation projects. It retains the state of the menu of pages and folders across page transitions, by keeping navigation to an iframe.</p>
+<p>It also implements a versatile search, featuring term highlighting, and both a quick dropdown and a full-page option that allows the user to come back to search results.</p>
 <p>Within pages, it uses the default mkdocs theme, including syntax highlighting.</p>
+<p>One of the key features is the support of deep nesting of pages into folders.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">#</a></h2>
-<p>Install the Windmill theme using <code>pip</code>:</p>
-<pre><code class="sh">pip install mkdocs-windmill
+<p>Install the CustomMill theme using <code>pip</code>:</p>
+<pre><code class="sh">pip install mkdocs-custommill
 </code></pre>
 
 <p>To install and get started with <code>mkdocs</code>, follow <a href="http://www.mkdocs.org/#installation">MkDocs documentation</a>.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<p>To use the Windmill theme installed via <code>pip</code>, add this to your <code>mkdocs.yml</code>:</p>
-<pre><code class="yaml">theme: 'windmill'
+<p>To use the CustomMill theme installed via <code>pip</code>, add this to your <code>mkdocs.yml</code>:</p>
+<pre><code class="yaml">theme: 'custommill'
 </code></pre>
 
-<p>If you cloned Windmill from GitHub:</p>
+<p>If you cloned CustomMill from GitHub:</p>
 <pre><code class="yaml">theme:
   name: null
   custom_dir: '{INSTALL_DIR}/mkdocs_windmill'
   # Copy settings from mkdocs_theme.yml, which is ignored by custom_dir themes.
-  static_templates: [404.html]
+  static_templates: [404.html, index.html, css/base.css]
+  home: home
   search_index_only: true
   include_search_page: true
+  main_color: '#bb0000'
+  gray: '#e0e0e0'
+  lighter_gray: '#eeeeee'
 </code></pre>
 
-<p>Note that it's important for there to exist a homepage, e.g. a top-level root element in mkdocs 1.0+:</p>
-<pre><code class="yaml">nav:
-  - Home: index.md
-</code></pre>
-
+<p>Note that it's important for there to set a <code>home</code> page that will be shown as front page. Specify the path to this page without the <code>.md</code> extension.</p>
 <p>See <a href="../customization/">Customization</a> for a few extra configuration options
-supported by the Windmill theme.</p>
+supported by the CustomMill theme.</p>
 
 			<br>
 			
