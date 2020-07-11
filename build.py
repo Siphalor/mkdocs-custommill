@@ -12,6 +12,6 @@ def main():
     elif task == 'publish':
         rmtree('dist', ignore_errors=True)
         system('python setup.py sdist bdist_wheel')
-        system('twine upload --repository testpypi dist/*')
+        system('twine upload dist/*')
 
 if __name__ == '__main__': main()

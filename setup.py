@@ -1,13 +1,16 @@
+import yaml
 from setuptools import setup, find_packages
 
-VERSION = '1.0.2'
-
 with open("README.md", "r") as fh:
-    long_desc = fh.read();
+    long_desc = fh.read()
+
+with open("mkdocs.yml", "r") as yml:
+    conf = yaml.safe_load(yml.read())
+    version = conf['extra']['version'][1:]
 
 setup(
     name="mkdocs-custommill",
-    version=VERSION,
+    version=version,
     url='https://github.com/Siphalor/mkdocs-custommill',
     classifiers=[
         'License :: OSI Approved :: MIT License',
