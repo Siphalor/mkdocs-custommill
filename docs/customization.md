@@ -19,3 +19,14 @@ listed under the `extra:` key of `mkdocs.yml`.
 `extra.history_buttons`: Include back/forward buttons in the top bar. This is
   useful when the documentation site is included into a bare browser, e.g. into
   an Electron-based application.
+
+`extra.css.main_color`: Sets the main theme color of the site. This should be a somewhat dark color as it is also used for links.
+
+`extra.css.gray`: Sets the gray tone used for some borders.
+
+`extra.css.lighter_gray`: Sets the gray tone used for various backgrounds.
+
+`extra.nav_info`: This defines the custom links above the table of contents. It is a list of objects with the following fields:
+- `type`: This indicates the to what you link by using the given value as a Fontawesome icon. Possible values include `github`, `twitter`, `facebook`, `slack` and a lot more!
+- `title`: This sets the text that is being displayed
+- `url`: Sets the links href
