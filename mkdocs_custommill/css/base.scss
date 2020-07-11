@@ -97,6 +97,9 @@
 		span.version-badge {
 			cursor: default;
 		}
+		img {
+			height: 40px;
+		}
 	}
 	.cm-navbar-group {
 		@include flexbox;
