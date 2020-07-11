@@ -11,6 +11,10 @@ theme:
   static_templates: [404.html, index.html, css/base.css]
   search_index_only: true
   include_search_page: true
+  home: usage
+  main_color: "#bb0000"
+  gray: "#e0e0e0"
+  lighter_gray: "#eeeeee"
 
 nav:
 - Usage: usage.md
@@ -29,12 +33,7 @@ markdown_extensions:
 extra:
   history_buttons: false
   version: v1.0.0
-  home: usage
   nav_info:
   - type: twitter
     title: Siphalor
     url: https://twitter.com/Siphalor
-  css:
-    main_color: "#bb0000"
-    gray: "#e0e0e0"
-    lighter_gray: "#eeeeee"

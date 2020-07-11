@@ -4,6 +4,6 @@
 // $lighter-gray: #eeeeee;
 $toc-nest-ident: 12px;
 
-$main-color: #{ "{{ config.extra.css.main_color }}" };
-$gray: #{ "{{ config.extra.css.gray }}" };
-$lighter-gray: #{ "{{ config.extra.css.lighter_gray }}" };
+$main-color: #{ "{{ config.theme.main_color }}" };
+$gray: #{ "{{ config.theme.gray }}" };
+$lighter-gray: #{ "{{ config.theme.lighter_gray }}" };

@@ -1,3 +1,6 @@
-static_templates: [404.html]
+static_templates: [404.html, index.html, css/base.css]
 search_index_only: true
 include_search_page: true
+main_color: "#bb0000"
+gray: "#e0e0e0"
+lighter_gray: "#eeeeee"

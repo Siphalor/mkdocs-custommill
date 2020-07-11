@@ -1,3 +1,6 @@
 /env/
 /tests/node_modules/
 /site/
+/dist/
+/build/
+/*.egg-info/
