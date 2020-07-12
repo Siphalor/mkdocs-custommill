@@ -32,8 +32,8 @@ markdown_extensions:
 
 extra:
   history_buttons: false
-  version: v1.0.3
-  nav_info:
-  - type: twitter
-    title: Siphalor
+  version: v1.0.4
+  nav_links:
+  - icon: twitter
+    text: Siphalor
     url: https://twitter.com/Siphalor

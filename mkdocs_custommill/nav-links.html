@@ -1,0 +1,8 @@
+{%- for entry in config.extra.nav_links %}
+<li>
+	<a href="{{ entry.url }}">
+		<i class="fa fa-{{ entry.icon }}" aria-hidden="true"></i>
+		{{ entry.text }}
+	</a>
+</li>
+{%- endfor %}

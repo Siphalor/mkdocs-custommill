@@ -30,7 +30,7 @@ Located on the `extra` key in your `mkdocs.yml`:
   useful when the documentation site is included into a bare browser, e.g. into
   an Electron-based application.
 
-- `nav_info`: This defines the custom links above the table of contents. It is a list of objects with the following fields:
-	- `type`: This indicates the to what you link by using the given value as a Fontawesome icon. Possible values include `github`, `twitter`, `facebook`, `slack` and a lot more!
-	- `title`: This sets the text that is being displayed
+- `nav_links`: This defines the custom links above the table of contents. It is a list of objects with the following fields:
+	- `icon`: This indicates to what you link by using the given value as a Fontawesome icon. Possible values include `github`, `twitter`, `facebook`, `slack` and a lot more!
+	- `text`: This sets the text that is being displayed
 	- `url`: Sets the links href
