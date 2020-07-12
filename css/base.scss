@@ -350,11 +350,11 @@ body {
 	a, a:hover, a:focus, a:visited {
 		color: $main-color;
 		outline: none;
-		text-decoration: none;
 	}
 	a:hover, a:focus {
 		&.btn:not(.btn-link) {
 			color: white;
+			text-decoration: none;
 		}
 	}
 }
