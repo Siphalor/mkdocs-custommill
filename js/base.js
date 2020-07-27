@@ -101,7 +101,7 @@ function updateIframe(enableForwardNav) {
 	// Grey out the "forward" button if we don't expect 'forward' to work.
 	$('#hist-fwd').toggleClass('greybtn', !enableForwardNav);
 
-	var targetRelPath = getRelPath('#', outerWindow.location.href) || '';
+	var targetRelPath = getRelPath('#', outerWindow.location.href).replace("~", "#") || '';
 	var targetIframeUrl;
 	if (targetRelPath.length <= 1) {
 		targetIframeUrl = home_url;
@@ -201,7 +201,7 @@ function adjustLink(linkEl) {
 		linkEl.setAttribute('data-cm-adjusted', 'done');
 		var relPath = getRelPath('/', linkEl.href);
 		if (relPath !== null) {
-			var newUrl = getAbsUrl('#', relPath);
+			var newUrl = getAbsUrl('#', relPath.replace('#', '~'));
 			linkEl.href = newUrl;
 		}
 	}
@@ -336,7 +336,7 @@ function renderPageToc(parentElem, pageUrl, pageToc) {
 	function addItem(tocItem) {
 		ul.append($('<li class="wm-toc-li">')
 			.append($('<a class="wm-article-link wm-page-toc-text">')
-				.attr('href', pageUrl + tocItem.url)
+				.attr('href', pageUrl + tocItem.url.replace("#", "~"))
 				.attr('data-cm-adjusted', 'done')
 				.text(tocItem.title)));
 		if (tocItem.children) {
