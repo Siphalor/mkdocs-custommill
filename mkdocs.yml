@@ -32,7 +32,7 @@ markdown_extensions:
 
 extra:
   history_buttons: false
-  version: v1.0.5
+  version: v1.0.6
   nav_links:
   - icon: twitter
     text: Siphalor
