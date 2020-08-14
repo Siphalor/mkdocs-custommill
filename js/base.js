@@ -55,10 +55,23 @@ $(document).ready(() => {
 });
 
 // For any dynamically-created links, adjust them on click.
-$(document).on('click', 'a:not([data-cm-adjusted])', function() { adjustLink(this); });
+onActivate(document, 'a:not([data-cm-adjusted])', ele => adjustLink(ele[0]));
 
 function startsWith(str, prefix) { return str.lastIndexOf(prefix, 0) === 0; }
 function endsWith(str, suffix) { return str.indexOf(suffix, str.length - suffix.length) !== -1; }
+
+/**
+ * Creates event handlers for click and the enter key
+ */
+function onActivate(sel, arg1, arg2) {
+	if (arg2 === undefined) {
+		$(sel).on('click', function(){ arg1($(this)); });
+		$(sel).on('keydown', function(e){ if(e.which === 13 || e.which === 32) arg1($(this)); });
+	} else {
+		$(sel).on('click', arg1, function(){ arg2($(this)); });
+		$(sel).on('keydown', arg1, function(e){ if(e.which === 13 || e.which === 32) arg2($(this)); });
+	}
+}
 
 /**
  * Returns whether to use small-screen mode. Note that the same size is used in css @media block.
@@ -227,9 +240,7 @@ function initMainWindow() {
 		$('#main-content').toggleClass('wm-toc-triggered');
 	});
 
-	$(window).on('resize', function() {
-		onResize();
-	});
+	$(window).on('resize', onResize);
 
 	// Connect up the Back and Forward buttons (if present).
 	$('#hist-back').on('click', function(e) { window.history.back(); });
@@ -239,18 +250,18 @@ function initMainWindow() {
 	$(window).on('blur', closeTempItems);
 
 	// When we click on an opener in the table of contents, open it.
-	$('.wm-toc-pane').on('click', '.wm-toc-opener', function(e) {
-		$(this).toggleClass('wm-toc-open');
-		$(this).next('.wm-toc-li-nested').collapse('toggle');
+	onActivate('.wm-toc-pane', '.wm-toc-opener', ele => {
+		ele.toggleClass('wm-toc-open');
+		ele.next('.wm-toc-li-nested').collapse('toggle');
 	});
-	$('.wm-toc-pane').on('click', '.wm-page-toc-opener', function(e) {
+	onActivate('.wm-toc-pane', '.wm-page-toc-opener', ele => {
 		// Ignore clicks while transitioning.
-		if ($(this).next('.wm-page-toc').hasClass('collapsing')) { return; }
+		if (ele.next('.wm-page-toc').hasClass('collapsing')) { return; }
 		showPageToc = !showPageToc;
-		$(this).toggleClass('wm-page-toc-open', showPageToc);
-		$(this).next('.wm-page-toc').collapse(showPageToc ? 'show' : 'hide');
+		ele.toggleClass('wm-page-toc-open', showPageToc);
+		ele.next('.wm-page-toc').collapse(showPageToc ? 'show' : 'hide');
 	});
-	$('.wm-toc-pane').on('click', 'a', function(e) {
+	onActivate('.wm-toc-pane', 'a', () => {
 		$('.wm-toc-pane').toggleClass('wm-toc-triggered');
 	});
 

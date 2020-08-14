@@ -7,3 +7,8 @@ $toc-nest-ident: 12px;
 $main-color: #{ "{{ config.theme.main_color }}" };
 $gray: #{ "{{ config.theme.gray }}" };
 $lighter-gray: #{ "{{ config.theme.lighter_gray }}" };
+
+$note-color: #5ba303;
+$info-color: #3181ea;
+$warning-color: #e5a40b;
+$error-color: #e53e0b;
