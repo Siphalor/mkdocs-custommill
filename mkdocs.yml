@@ -27,6 +27,7 @@ nav:
   - Sample Page B: sample-b.md
 
 markdown_extensions:
+  - admonition
   - toc:
       permalink: '#'
 

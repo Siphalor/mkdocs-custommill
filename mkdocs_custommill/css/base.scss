@@ -227,7 +227,7 @@ body {
 	background-color: $lighter-gray;
 	border-right: 1px solid $gray;
 	border-bottom: 1px solid $gray;
-	padding: 70px 1rem 2rem;
+	padding: 2rem 1rem 2rem;
 	margin-left: 0px;
 	@include transition(margin-left 0.3s);
 
@@ -326,6 +326,12 @@ body {
 				content: "\25BC \FE0E";
 			}
 		}
+		& > a:focus, & > span:focus {
+			border-width: inherit;
+			outline: inherit;
+			text-decoration: underline;
+			text-decoration-style: dotted;
+		}
 	}
 
 	hr {
@@ -352,10 +358,17 @@ body {
 		outline: none;
 	}
 	a:hover, a:focus {
+		text-decoration-line: underline;
+	}
+	a:hover {
+		text-decoration-style: solid;
 		&.btn:not(.btn-link) {
 			color: white;
 			text-decoration: none;
 		}
+	}
+	a:focus {
+		text-decoration-style: dotted;
 	}
 }
 
@@ -420,32 +433,45 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .admonition {
-	padding: 15px;
-	margin-bottom: 20px;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	text-align: left;
+	border-style: solid;
+	border-width: 1px;
+	margin-bottom: 1rem;
+
+	&.note {
+		border-color: $note-color;
+		.admonition-title {
+			background-color: $note-color;
+		}
+	}
+	&.info {
+		border-color: $info-color;
+		.admonition-title {
+			background-color: $info-color;
+		}
+	}
+	&.warning {
+		border-color: $warning-color;
+		.admonition-title {
+			background-color: $warning-color;
+		}
+	}
+	&.error {
+		border-color: $error-color;
+		.admonition-title {
+			background-color: $error-color;
+		}
+	}
+
+	.admonition-title {
+		padding: 0.3rem 1rem;
+		color: $lighter-gray;
+		font-weight: bold;
+	}
+	p {
+		margin-bottom: 0;
+	}
+	p:not(.admonition-title) {
+		padding: 0.5em 0.75rem;
+	}
 }
 
-.admonition.note { /* csslint allow: adjoining-classes */
-	color: #3a87ad;
-	background-color: #d9edf7;
-	border-color: #bce8f1;
-}
-
-.admonition.warning { /* csslint allow: adjoining-classes */
-	color: #c09853;
-	background-color: #fcf8e3;
-	border-color: #fbeed5;
-}
-
-.admonition.danger { /* csslint allow: adjoining-classes */
-	color: #b94a48;
-	background-color: #f2dede;
-	border-color: #eed3d7;
-}
-
-.admonition-title {
-	font-weight: bold;
-	text-align: left;
-}
