@@ -8,7 +8,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		{% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}">{% endif %}
+		{% if is_top %}<meta name="description" content="{{ config.site_description }}">{% endif %}
 		{% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
 		{% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
 		{% if config.site_favicon %}<link rel="shortcut icon" href="{{ base_url }}/{{ config.site_favicon }}">
@@ -17,7 +17,7 @@
 		{%- endblock %}
 
 		{%- block htmltitle %}
-		<title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
+		<title>{% if page and page.title and not is_top %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
 		{%- endblock %}
 
 		{%- block styles %}
