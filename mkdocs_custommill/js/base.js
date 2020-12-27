@@ -49,14 +49,6 @@ if (is_outer_page) {
 	});
 }
 
-// Adjust all links to point to the top page with the right hash fragment.
-$(document).ready(() => {
-	$('a').each((i, ele) => adjustLink(ele));
-});
-
-// For any dynamically-created links, adjust them on click.
-onActivate(document, 'a:not([data-cm-adjusted])', ele => adjustLink(ele[0]));
-
 function startsWith(str, prefix) { return str.lastIndexOf(prefix, 0) === 0; }
 function endsWith(str, suffix) { return str.indexOf(suffix, str.length - suffix.length) !== -1; }
 
@@ -267,6 +259,8 @@ function initMainWindow() {
 
 	// Once the article loads in the side-pane, close the dropdown.
 	$('.wm-article').on('load', function() {
+		onInnerWindowUpdated();
+
 		document.title = innerWindow.document.title;
 		onResize();
 
@@ -292,6 +286,11 @@ function initMainWindow() {
 	$(window).on('hashchange', function() { updateIframe(true); });
 }
 
+function onInnerWindowUpdated() {
+	window.history.replaceState(null, '', getAbsUrl('#', getRelPath('/', innerWindow.location.href).replace('#', '~')));
+	$('#mkdocs-search-results').collapse('hide');
+}
+
 function onIframeBeforeLoad(url) {
 	$('.wm-current').removeClass('wm-current');
 	closeTempItems();
@@ -305,7 +304,7 @@ function onIframeBeforeLoad(url) {
 }
 
 function getTocLi(url) {
-	var relPath = getAbsUrl('#', getRelPath('/', cleanUrlPath(url)));
+	var relPath = getRelPath('/', cleanUrlPath(url));
 	var selector = '.wm-article-link[href="' + relPath + '"]';
 	return $(selector).closest('.wm-toc-li');
 }
@@ -324,11 +323,18 @@ function onIframeLoad() {
 	if (!innerWindow) { _deferIframeLoad = true; return; }
 	var url = innerWindow.location.href;
 	onIframeBeforeLoad(url);
+	$(innerWindow).on('hashchange', onInnerWindowUpdated);
 
 	if (innerWindow.pageToc) {
 		var relPath = getAbsUrl('#', getRelPath('/', cleanUrlPath(url)));
-		renderPageToc(getTocLi(url), relPath, innerWindow.pageToc);
+		var li = getTocLi(url);
+		if (!li.hasClass('wm-page-toc-open')) {
+			renderPageToc(li, relPath, innerWindow.pageToc);
+		}
+	} else {
+		//collapseAndRemove($('.wm-page-toc'));
 	}
+
 	innerWindow.focus();
 }
 
@@ -400,7 +406,7 @@ function initSearch() {
 				limit: 10
 			});
 		}
-		searchResults.dropdown(show ? 'show' : 'hide');
+		searchResults.collapse(show ? 'show' : 'hide');
 		return show;
 	}
 
@@ -449,16 +455,11 @@ function initSearch() {
 		}
 	});
 
-	$(searchResults).on('click', 'a', function(e) {
-		visitUrl($(this).href);
-		searchResults.dropdown('hide');
-	});
-
 	// Redirect to the search page on Enter or button-click (form submit).
 	$('#wm-search-form').on('submit', function(e) {
 		visitUrl(this.action + '?q=' + searchBox.val());
 		e.preventDefault();
-		searchResults.dropdown('hide');
+		searchResults.collapse('hide');
 	});
 }
 
@@ -526,16 +527,18 @@ function doSearch(options) {
 			var doc = searchIndex.documentStore.getDoc(results[i].ref);
 			var snippet = snippetBuilder.getSnippet(doc.text, snippetLen);
 			resultsElem.append(
-				$('<a class="dropdown-item">').attr('href', pathJoin(base_url, doc.location))
+				$('<a class="dropdown-item">').attr('href', limit == 0 ? doc.location : pathJoin(base_url, doc.location))
 				.append($('<h6 class="dropdown-header">').text(doc.title))
 				.append($('<p>').html(snippet))
 			);
 		}
-		resultsElem.find('a').each(function() { adjustLink(this); });
+		if (limit != 0) {
+			resultsElem.find('a').each(function() { adjustLink(this); });
+		}
 		if (limit) {
 			resultsElem.append($('<div class="dropdown-divider" role="separator"></div>'));
 			resultsElem.append($(
-				'<a class="dropdown-item" href="' + base_url + '/search.html?q=' + query + '" id="search-show-all">' +
+				'<a class="dropdown-item" href="' + base_url + '/search.html?q=' + query + '" id="search-show-all" target="article">' +
 				'SEE ALL RESULTS</a>'));
 		}
 	} else {
