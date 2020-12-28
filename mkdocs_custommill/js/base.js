@@ -18,11 +18,24 @@ var Keys = {
 	UP:     38,
 	DOWN:   40,
 };
+var TABLE_CLASSES = [ 'table', 'table-striped', 'table-hover', 'table-bordered', 'table-condensed' ];
+
+function onReady(doc, fun) {
+	if (doc.readyState === 'interactive' || doc.readyState === 'complete') {
+		fun();
+	} else {
+		doc.addEventListener('DOMContentLoaded', fun);
+	}
+}
+
+function forEach(iterable, fun) {
+	Array.prototype.forEach.call(iterable, fun);
+}
 
 if (is_outer_page) {
 	// Main window.
-	$(document).ready(function() {
-		innerWindow = $('.wm-article')[0].contentWindow;
+	onReady(document, function() {
+		innerWindow = document.getElementsByClassName('wm-article')[0].contentWindow;
 		initMainWindow();
 		ensureIframeLoaded();
 	});
@@ -42,8 +55,10 @@ if (is_outer_page) {
 
 	// Other initialization of iframe contents.
 	hljs.initHighlightingOnLoad();
-	$(document).ready(function() {
-		$('table').addClass('table table-striped table-hover table-bordered table-condensed');
+	onReady(document, function() {
+		forEach(document.getElementsByTagName('table'), function(table) {
+			TABLE_CLASSES.forEach(function(clazz) { table.classList.add(clazz); });
+		});
 	});
 }
 
