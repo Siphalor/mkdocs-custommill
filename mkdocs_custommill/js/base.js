@@ -179,34 +179,14 @@ function closeTempItems() {
 }
 
 /**
- * Visit the given URL. This changes the hash of the top page to reflect the new URL's relative
- * path, and points the iframe to the new URL.
- */
-function visitUrl(url) {
-	var relPath = getRelPath('/', url);
-	if (relPath !== null) {
-		var newUrl = getAbsUrl('#', relPath);
-		if (newUrl !== outerWindow.location.href) {
-			outerWindow.history.pushState(null, '', newUrl);
-			updateIframe(false);
-		}
-		closeTempItems();
-		innerWindow.focus();
-	}
-}
-
-/**
  * Adjusts link to point to a top page, converting URL from "base/path" to "base#path". It also
  * sets a data-adjusted attribute on the link, to skip adjustments on future clicks.
  */
 function adjustLink(linkEl) {
-	if (!linkEl.hasAttribute('data-cm-adjusted')) {
-		linkEl.setAttribute('data-cm-adjusted', 'done');
-		var relPath = getRelPath('/', linkEl.href);
-		if (relPath !== null) {
-			var newUrl = getAbsUrl('#', relPath.replace('#', '~'));
-			linkEl.href = newUrl;
-		}
+	var relPath = getRelPath('/', linkEl.href);
+	if (relPath !== null) {
+		var newUrl = getAbsUrl('#', relPath.replace('#', '~'));
+		linkEl.href = newUrl;
 	}
 }
 
@@ -451,13 +431,6 @@ function initSearch() {
 		} else if (e.which !== Keys.ENTER) {
 			searchBox.focus();
 		}
-	});
-
-	// Redirect to the search page on Enter or button-click (form submit).
-	$('#wm-search-form').on('submit', function(e) {
-		visitUrl(this.action + '?q=' + searchBox.val());
-		e.preventDefault();
-		searchResults.collapse('hide');
 	});
 }
 
