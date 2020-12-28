@@ -29,7 +29,33 @@ function onReady(doc, fun) {
 }
 
 function forEach(iterable, fun) {
-	Array.prototype.forEach.call(iterable, fun);
+	for (var i = 0; i < iterable.length; i++) {
+		fun(iterable[i]);
+	}
+}
+
+function toggleClass(ele, clazz, value) {
+	if (!ele) {
+		return;
+	}
+	if (value) {
+		ele.classList.add(clazz);
+	} else {
+		ele.classList.remove(clazz);
+	}
+}
+
+function toggleCollapse(collapse, value) {
+	if (value) {
+		collapse.show();
+	} else {
+		collapse.hide();
+	}
+}
+
+function getCollapse(ele) {
+	var collapse = bootstrap.Collapse.getInstance(ele);
+	return collapse ? collapse : new bootstrap.Collapse(ele, { toggle: false });
 }
 
 if (is_outer_page) {
@@ -68,14 +94,15 @@ function endsWith(str, suffix) { return str.indexOf(suffix, str.length - suffix.
 /**
  * Creates event handlers for click and the enter key
  */
-function onActivate(sel, arg1, arg2) {
-	if (arg2 === undefined) {
-		$(sel).on('click', function(){ arg1($(this)); });
-		$(sel).on('keydown', function(e){ if(e.which === 13 || e.which === 32) arg1($(this)); });
-	} else {
-		$(sel).on('click', arg1, function(){ arg2($(this)); });
-		$(sel).on('keydown', arg1, function(e){ if(e.which === 13 || e.which === 32) arg2($(this)); });
-	}
+function onActivate(sel, fun) {
+	forEach(document.querySelectorAll(sel), function(ele) {
+		ele.addEventListener('click', function() { fun(ele); });
+		ele.addEventListener('keydown', function() {
+			if (e.which === 13 || e.which === 32) {
+				fun(ele);
+			}
+		});
+	});
 }
 
 /**
@@ -117,7 +144,7 @@ function getAbsUrl(separator, relPath) {
  */
 function updateIframe(enableForwardNav) {
 	// Grey out the "forward" button if we don't expect 'forward' to work.
-	$('#hist-fwd').toggleClass('greybtn', !enableForwardNav);
+	toggleClass(document.getElementById('hist-fwd'), 'bg-gray', !enableForwardNav);
 
 	var targetRelPath = (getRelPath('#', outerWindow.location.href) || "").replace("~", "#");
 	var targetIframeUrl;
@@ -169,17 +196,20 @@ function getParam(key) {
  */
 function onResize() {
 	if (isSmallScreen()) {
-		if ($('.wm-article').attr('scrolling') !== 'no') {
-			$('#wm-search-form').removeClass('show');
-			$('.wm-article').attr('scrolling', 'no');
+		var article = document.getElementsByClassName('wm-article')[0];
+		if (article.getAttribute('scrolling') !== 'no') {
+			document.getElementById('wm-search-form').classList.remove('show');
+			article.setAttribute('scrolling', 'no');
 		}
-		$('.wm-toc-pane').css('top', $('.navbar').height());
-		$('.wm-content-pane').height(innerWindow.document.body.offsetHeight + 20);
+		var height = document.getElementsByClassName('navbar')[0].getBoundingClientRect().height;
+		document.getElementsByClassName('wm-toc-pane')[0].style.top = height + 'px';
+		document.getElementsByClassName('wm-content-pane')[0].style.height = innerWindow.document.body.offsetHeight + 20 + 'px';
 	} else {
-		$('#wm-search-form').addClass('show');
-		$('.wm-content-pane').height('');
-		$('.wm-article').attr('scrolling', 'auto');
-		$('.wm-toc-pane').css('top', 0);
+		document.getElementById('wm-search-form')
+		document.getElementById('wm-search-form').classList.add('show');
+		document.getElementsByClassName('wm-content-pane')[0].removeAttribute('style');
+		document.getElementsByClassName('wm-article')[0].setAttribute('scrolling', 'auto');
+		document.getElementsByClassName('wm-toc-pane')[0].style.top = 0;
 	}
 }
 
@@ -235,19 +265,21 @@ function initMainWindow() {
 	$(window).on('blur', closeTempItems);
 
 	// When we click on an opener in the table of contents, open it.
-	onActivate('.wm-toc-pane', '.wm-toc-opener', ele => {
-		ele.toggleClass('wm-toc-open');
-		ele.next('.wm-toc-li-nested').collapse('toggle');
+	onActivate('.wm-toc-pane .wm-toc-opener', function(ele) {
+		ele.classList.toggle('wm-toc-open');
+		getCollapse(ele.nextElementSibling).toggle();
 	});
-	onActivate('.wm-toc-pane', '.wm-page-toc-opener', ele => {
+	onActivate('.wm-toc-pane .wm-page-toc-opener', function(ele) {
 		// Ignore clicks while transitioning.
-		if (ele.next('.wm-page-toc').hasClass('collapsing')) { return; }
+		if (ele.nextElementSibling.classList.contains('collapsing')) {
+			return;
+		}
 		showPageToc = !showPageToc;
-		ele.toggleClass('wm-page-toc-open', showPageToc);
-		ele.next('.wm-page-toc').collapse(showPageToc ? 'show' : 'hide');
+		toggleClass(ele, 'wm-page-toc-open', showPageToc);
+		toggleCollapse(getCollapse(ele.nextElementSibling), showPageToc);
 	});
-	onActivate('.wm-toc-pane', 'a', () => {
-		$('.wm-toc-pane').toggleClass('wm-toc-triggered');
+	onActivate('.wm-toc-pane a', function() {
+		document.getElementsByClassName('wm-toc-pane')[0].classList.toggle('wm-toc-triggered');
 	});
 
 	// Once the article loads in the side-pane, close the dropdown.
