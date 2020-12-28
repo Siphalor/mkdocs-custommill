@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-dark shadow">
-	<div class="navbar-brand pb-0 pt-0">
+	<div class="navbar-brand py-0">
 		<a href="{{ name }}">
 			{% if config.extra.logo %}
 			<img src="{{ base_url }}/{{ config.extra.logo }}" alt="{{config.site_name}} Logo" />
@@ -18,13 +18,13 @@
 		<button type="button" id="wm-toc-button" class="btn btn-sm btn-light"><i class="fa fa-th-list" aria-label="Open/Close navigation pane"></i></button>
 
 		{# Search button #}
-		<button class="btn btn-sm btn-light d-md-none d-inline-block ml-2" type="button" id="wm-search-show" data-toggle="collapse" data-target="#wm-search-form" aria-label="Open/Close Search" aria-hidden="true"
+		<button class="btn btn-sm btn-light d-md-none d-inline-block ms-2" type="button" id="wm-search-show" data-toggle="collapse" data-target="#wm-search-form" aria-label="Open/Close Search" aria-hidden="true"
 			><i class="fa fa-search" aria-hidden="true"></i>
 		</button>
 
 		{# Optional forward-back buttons #}
 		{% if config.extra.history_buttons %}
-		<div class="btn-group ml-2" role="group">
+		<div class="btn-group ms-2" role="group">
 			<button type="button" class="btn btn-sm btn-light" id="hist-back"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-sm btn-light" id="hist-fwd"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
 		</div>
