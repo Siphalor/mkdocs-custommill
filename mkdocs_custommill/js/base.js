@@ -450,7 +450,7 @@ function initSearch() {
 					$(e.target).nextAll('a')[0].focus();
 				}
 			}
-		} else {
+		} else if (e.which !== Keys.ENTER) {
 			searchBox.focus();
 		}
 	});
