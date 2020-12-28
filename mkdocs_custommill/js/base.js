@@ -1,5 +1,3 @@
-/* global window, document, $, hljs, elasticlunr, base_url, is_outer_page */
-/* exported getParam, onIframeLoad */
 "use strict";
 
 // The full page consists of a main window with navigation and table of contents, and an inner
