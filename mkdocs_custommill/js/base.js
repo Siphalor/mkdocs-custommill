@@ -85,6 +85,9 @@ if (is_outer_page) {
 		forEach(document.getElementsByTagName('table'), function(table) {
 			TABLE_CLASSES.forEach(function(clazz) { table.classList.add(clazz); });
 		});
+		forEach(document.querySelectorAll('a[href*="://"]'), function(link) {
+			link.target = '_blank';
+		});
 	});
 }
 
