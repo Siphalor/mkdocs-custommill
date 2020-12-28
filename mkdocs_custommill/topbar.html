@@ -8,7 +8,7 @@
 		</a>
 		{%- block version %}
 		{% if config.extra.version %}
-		<span class="badge badge-light version-badge ml-1">{{ config.extra.version }}</span>
+		<span class="badge bg-light text-dark p-1 ms-1">{{ config.extra.version }}</span>
 		{% endif %}
 		{%- endblock %}
 	</div>
@@ -35,12 +35,10 @@
 		<div class="input-group input-group-sm">
 			{# Search group #}
 			<input type="search" class="form-control" placeholder="Search" id="mkdocs-search-query" name="q" autocomplete="off">
-			<div class="input-group-append" role="search">
-				<div id="mkdocs-search-results" class="dropdown-menu dropdown-menu-right collapse"></div>
-				<button class="btn btn-light" type="submit" aria-label="Search"
-					><i class="fa fa-search" aria-hidden="true"></i>
-				</button>
-			</div>
+			<button class="btn btn-light" type="submit" aria-label="Search"
+				><i class="fa fa-search" aria-hidden="true"></i>
+			</button>
 		</div>
+		<div id="mkdocs-search-results" class="dropdown-menu dropdown-menu-end collapse"></div>
 	</form>
 </nav>

@@ -94,9 +94,6 @@
 			color: inherit;
 			text-decoration: inherit;
 		}
-		span.version-badge {
-			cursor: default;
-		}
 		img {
 			height: 40px;
 		}
@@ -115,6 +112,7 @@
 		@include flex(2 2 100%);
 		@media (min-width: 768px) {
 			@include flex(0 0);
+			min-width: min(15em, 80vw);
 		}
 		& > * {
 			@media (max-width: 767.98px) {
@@ -146,6 +144,7 @@
 		white-space: normal;
 		max-height: calc(100vh - 60px);
 		max-width: 90vw;
+		right: 0 !important; /* Required because Bootstrap 5 breaks it's own right formatting?! */
 		p {
 			overflow: hidden;
 			margin-bottom: 0;
@@ -268,9 +267,6 @@ body {
 				background-color: $gray;
 			}
 		}
-		a:hover {
-			text-decoration: none;
-		}
 		&.wm-current {
 			background-color: $main-color;
 			color: white;
@@ -355,6 +351,7 @@ $sel: '.wm-toc-pane';
 .wm-toc-pane, .wm-page-content, #mkdocs-search-results {
 	a, a:hover, a:focus, a:visited {
 		color: $main-color;
+		text-decoration: none;
 		outline: none;
 	}
 	a:hover, a:focus {
@@ -424,6 +421,10 @@ pre code {
 	font-size: 70%;
 	padding-left: .5em;
 	visibility: hidden;
+	text-decoration: none;
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 h1, h2, h3, h4, h5, h6 {
