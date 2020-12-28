@@ -221,9 +221,11 @@ function onResize() {
  */
 function closeTempItems() {
 	if (isSmallScreen()) {
-		$('.wm-toc-triggered').removeClass('wm-toc-triggered');
+		forEach(document.getElementsByClassName('wm-toc-triggered'), function(ele) {
+			ele.classList.remove('wm-toc-triggered');
+		});
 	}
-	$('#mkdocs-search-container').dropdown('hide');
+	getCollapse(document.getElementById('mkdocs-search-results')).hide();
 }
 
 /**
@@ -251,21 +253,19 @@ function cleanUrlPath(relUrl) {
 function initMainWindow() {
 	// wm-toc-button either opens the table of contents in the side-pane, or (on smaller screens)
 	// shows the side-pane as a drop-down.
-	$('#wm-toc-button').on('click', function(e) {
+	onActivate('#wm-toc-button', function(e) {
 		if (isSmallScreen()) {
 			window.scroll(0,0);
 		}
-		$('#main-content').toggleClass('wm-toc-triggered');
+		document.getElementById('main-content').classList.remove('wm-toc-triggered');
 	});
 
-	$(window).on('resize', onResize);
+	window.addEventListener('resize', onResize);
+	window.addEventListener('blur', closeTempItems);
 
 	// Connect up the Back and Forward buttons (if present).
-	$('#hist-back').on('click', function(e) { window.history.back(); });
-	$('#hist-fwd').on('click', function(e) { window.history.forward(); });
-
-	// When the side-pane is a dropdown, hide it on click-away.
-	$(window).on('blur', closeTempItems);
+	onActivate('#hist-back', function(e) { window.history.back(); });
+	onActivate('#hist-fwd', function(e) { window.history.forward(); });
 
 	// When we click on an opener in the table of contents, open it.
 	onActivate('.wm-toc-pane .wm-toc-opener', function(ele) {
@@ -286,7 +286,7 @@ function initMainWindow() {
 	});
 
 	// Once the article loads in the side-pane, close the dropdown.
-	$('.wm-article').on('load', function() {
+	document.getElementsByClassName('wm-article')[0].addEventListener('load', function() {
 		onInnerWindowUpdated();
 
 		document.title = innerWindow.document.title;
@@ -311,12 +311,12 @@ function initMainWindow() {
 	// Load the iframe now, and whenever we navigate the top frame.
 	setTimeout(function() { updateIframe(false); }, 0);
 	// For our usage, 'popstate' or 'hashchange' would work, but only 'hashchange' works on IE.
-	$(window).on('hashchange', function() { updateIframe(true); });
+	window.addEventListener('hashchange', function() { updateIframe(false); });
 }
 
 function onInnerWindowUpdated() {
 	window.history.replaceState(null, '', getAbsUrl('#', getRelPath('/', innerWindow.location.href).replace('#', '~')));
-	$('#mkdocs-search-results').collapse('hide');
+	getCollapse(document.getElementById('mkdocs-search-results')).hide();
 }
 
 function onIframeBeforeLoad(url) {
@@ -351,7 +351,7 @@ function onIframeLoad() {
 	if (!innerWindow) { _deferIframeLoad = true; return; }
 	var url = innerWindow.location.href;
 	onIframeBeforeLoad(url);
-	$(innerWindow).on('hashchange', onInnerWindowUpdated);
+	innerWindow.addEventListener('hashchange', onInnerWindowUpdated);
 
 	if (innerWindow.pageToc) {
 		var relPath = getAbsUrl('#', getRelPath('/', cleanUrlPath(url)));
