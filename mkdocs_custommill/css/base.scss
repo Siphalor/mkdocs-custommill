@@ -245,22 +245,6 @@ body {
 		width: 100%;
 	}
 
-	// calculating all of the nesting paddings
-	$sel: '&';
-	@for $i from 0 through 6 {
-		// The folders should align with their contents because they're prefixed with their carets
-		#{$sel} ul > li.wm-toc-opener {
-			padding-left: calc(#{$toc-nest-ident} + #{($i + 1) * $toc-nest-ident});
-		}
-		#{$sel} ul:not(.wm-page-toc-tree) > li:not(.wm-toc-li-nested):not(.wm-toc-opener) {
-			padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
-		}
-		#{$sel} ul > li > ul.wm-page-toc-tree {
-			padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
-		}
-		$sel: selector-nest($sel, "li");
-	}
-
 	ul {
 		list-style: none;
 		margin-left: 0;
@@ -337,6 +321,22 @@ body {
 	hr {
 		margin: 10px $toc-nest-ident / 2;
 	}
+}
+
+// calculating all of the nesting paddings
+$sel: '.wm-toc-pane';
+@for $i from 0 through 6 {
+	// The folders should align with their contents because they're prefixed with their carets
+	#{$sel} ul > li.wm-toc-opener {
+		padding-left: calc(#{$toc-nest-ident} + #{($i + 1) * $toc-nest-ident});
+	}
+	#{$sel} ul:not(.wm-page-toc-tree) > li:not(.wm-toc-li-nested):not(.wm-toc-opener) {
+		padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
+	}
+	#{$sel} ul > li > ul.wm-page-toc-tree {
+		padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
+	}
+	$sel: selector-nest($sel, "li");
 }
 
 // This is neccessary because on small screens the toc is hidden by default but on large screens it should be visible
