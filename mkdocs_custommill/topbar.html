@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-sm navbar-dark shadow">
 	<div class="navbar-brand py-0">
-		<a href="{{ name }}">
+		<a href="{{ config.theme.home or "home" }}" target="article">
 			{% if config.extra.logo %}
 			<img src="{{ base_url }}/{{ config.extra.logo }}" alt="{{config.site_name}} Logo" />
 			{% endif %}
