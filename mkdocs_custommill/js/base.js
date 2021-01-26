@@ -385,28 +385,38 @@ function collapseAndRemove(collapsibleElem) {
 }
 
 function renderPageToc(parentElem, pageUrl, pageToc) {
-	parentElem = $(parentElem);
-	var ul = $('<ul class="wm-page-toc-tree">');
+	var ul = document.createElement('ul');
+	ul.classList.add('wm-page-toc-tree');
 	function addItem(tocItem) {
-		ul.append($('<li class="wm-toc-li">')
-			.append($('<a class="wm-article-link wm-page-toc-text">')
-				.attr('href', pageUrl + tocItem.url.replace("#", "~"))
-				.attr('data-cm-adjusted', 'done')
-				.text(tocItem.title)));
+		var li = document.createElement('li');
+		li.classList.add('wm-toc-li');
+		var link = document.createElement('a');
+		link.href = pageUrl + tocItem.url.replace('#', '~');
+		link.setAttribute('class', 'wm-article-link wm-page-toc-text');
+		link.innerHTML = tocItem.title;
+		li.appendChild(link);
+		ul.appendChild(li);
+
 		if (tocItem.children) {
 			tocItem.children.forEach(addItem);
 		}
 	}
 	pageToc.forEach(addItem);
 
-	$('.wm-page-toc-opener').removeClass('wm-page-toc-opener wm-page-toc-open');
+	forEach(document.getElementsByClassName('wm-page-toc-opener'), function(ele) {
+		ele.classList.remove('wm-page-toc-open');
+		ele.classList.remove('wm-page-toc-opener');
+	});
 	forEach(document.getElementsByClassName('wm-page-toc'), function(ele) {
 		collapseAndRemove(ele);
 	});
 
-	parentElem.addClass('wm-page-toc-opener').toggleClass('wm-page-toc-open', showPageToc);
-	$('<li class="wm-page-toc wm-toc-li-nested collapse">').append(ul).insertAfter(parentElem)
-		.collapse(showPageToc ? 'show' : 'hide');
+	parentElem.classList.add('wm-page-toc-opener');
+	toggleClass(parentElem, 'wm-page-toc-open', showPageToc);
+	var li = document.createElement('li');
+	li.setAttribute('class', 'wm-page-toc wm-toc-li-nested collapse');
+	li.appendChild(ul);
+	parentElem.insertAdjacentElement('afterend', li);
 }
 
 var searchIndexReady = false;
