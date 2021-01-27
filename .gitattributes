@@ -1,0 +1,5 @@
+mkdocs_custommill/webfonts/* binary
+*.min.css binary
+*.min.js binary
+*.svg binary
+
