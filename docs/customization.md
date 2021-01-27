@@ -31,6 +31,7 @@ Located on the `extra` key in your `mkdocs.yml`:
   an Electron-based application.
 
 - `nav_links`: This defines the custom links above the table of contents. It is a list of objects with the following fields:
-	- `icon`: This indicates to what you link by using the given value as a Fontawesome icon. Possible values include `github`, `twitter`, `facebook`, `slack` and a lot more!
+	- `icon`: This indicates to what you link by using the given value as a [FontAwesome](https://fontawesome.com/icons) icon. Possible values include `github`, `twitter`, `facebook`, `slack` and a lot more!
+	- `icon_type`: This defines the FontAwesome icon class. You'll need to set this to `brand` to make use of brand icons like `twitter`. `brand` internally sets the `fab` class instead of the `fa` class.
 	- `text`: This sets the text that is being displayed
 	- `url`: Sets the links href
