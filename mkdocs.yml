@@ -36,5 +36,6 @@ extra:
   version: v1.1.0
   nav_links:
   - icon: twitter
+    icon_type: brand
     text: Siphalor
     url: https://twitter.com/Siphalor
