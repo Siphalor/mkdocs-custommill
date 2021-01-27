@@ -45,13 +45,13 @@
 			var home_url = '{{ base_url }}/{{ config.theme.home or "home" }}';
 			var is_outer_page = {{ 'true' if is_top else 'false' }};
 			{%- if page %}
-			{# Include the first two levels of TOC data as a JS object, to be rendered in top frame #}
+			{# Include levels of TOC data as a JS object, to be rendered in top frame #}
 			var pageToc = [
-				{%- for item in page.toc %}
+				{%- for item in page.toc recursive %}
 				{title: {{ item.title|tojson }}, url: {{ ('#_top' if loop.first else item.url)|tojson }}, children: [
-					{%- for item in item.children %}
-					{title: {{ item.title|tojson }}, url: {{ item.url|tojson }} },
-					{%- endfor %}
+					{%- if item.children and loop.depth < config.theme.toc_depth %}
+						{{ loop(item.children) }}
+					{%- endif %}
 				]},
 				{%- endfor %}
 			];
@@ -146,7 +146,7 @@ ga('send', 'pageview');
 				<summary>
 					Documentation built with <a href="http://www.mkdocs.org/" target="_blank">MkDocs</a> using  <a href="https://github.com/Siphalor/mkdocs-custommill" target="_blank">CustomMill</a>.
 				</summary>
-				<h6 class="mt-2">Additional License and Usage Information</h6>
+				<h6 class="mt-2">Additional Licenses</h6>
 				<ul>
 					<li>
 						CustomMill is based on the <a href="https://github.com/gristlabs/mkdocs-windmill" target="_blank">Windmill</a> theme by Grist Labs, licensed under the <a href="https://github.com/gristlabs/mkdocs-windmill/blob/master/LICENSE" target="_blank">MIT License</a>
@@ -161,9 +161,10 @@ ga('send', 'pageview');
 						Syntax highlighting is implemented via <a href="https://highlightjs.org" target="_blank">highlight.js</a> licensed under the BSD 3-Clause License and the included github styling made by Vasily Polovnyov.
 					</li>
 					<li>
-						Icons on this site are from <a href="https://fontawesome.com/v4.7.0/" target="_blank">FontAwesome v4.7.0</a> which is licensed as <a href="http://scripts.sil.org/OFL" target="_blank">SIL OFL 1.1</a>.
+						Icons on this site are from <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> which is licensed under the <a href="https://fontawesome.com/license/free" target="_blank">Font Awesome Free License</a>.
 					</li>
 				</ul>
+				<p>Built at {{ build_date_utc.strftime(config.theme.date_time_format) }}</p>
 			</details>
 			{%- endblock %}
 		</footer>
