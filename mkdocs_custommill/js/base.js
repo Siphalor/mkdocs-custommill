@@ -44,6 +44,10 @@ if (is_outer_page) {
 	hljs.initHighlightingOnLoad();
 	$(document).ready(function() {
 		$('table').addClass('table table-striped table-hover table-bordered table-condensed');
+		$('a').filter(function(i, val) {
+			val = $(val);
+			return val.attr("href") && val.attr("href").match(/^\w+:\/\//);
+		}).attr("target", "_blank");
 	});
 }
 
