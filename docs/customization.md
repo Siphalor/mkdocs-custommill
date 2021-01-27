@@ -8,11 +8,17 @@ In addition, this theme supports a few additional options.
 ## `theme` configuration options
 Located on the `theme` key in your `mkdocs.yml`:
 
+- `home`: Sets the initial landing page.
+
 - `main_color`: Sets the main theme color of the site. This should be a somewhat dark color as it is also used for links.
 
 - `gray`: Sets the gray tone used for some borders.
 
 - `lighter_gray`: Sets the gray tone used for various backgrounds.
+
+- `date_time_format`: Date and time formatting used for the time stamps at the bottom of pages. Formatting is implemented using [strftime](https://strftime.org/).
+
+- `toc_depth`: The levels of headings to include in the table of contents in the navigation pane for the currently open page.
 
 
 ## `extra` configuration options
