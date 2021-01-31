@@ -94,9 +94,6 @@
 			color: inherit;
 			text-decoration: inherit;
 		}
-		span.version-badge {
-			cursor: default;
-		}
 		img {
 			height: 40px;
 		}
@@ -115,6 +112,7 @@
 		@include flex(2 2 100%);
 		@media (min-width: 768px) {
 			@include flex(0 0);
+			min-width: min(15em, 80vw);
 		}
 		& > * {
 			@media (max-width: 767.98px) {
@@ -146,6 +144,7 @@
 		white-space: normal;
 		max-height: calc(100vh - 60px);
 		max-width: 90vw;
+		right: 0 !important; /* Required because Bootstrap 5 breaks it's own right formatting?! */
 		p {
 			overflow: hidden;
 			margin-bottom: 0;
@@ -245,22 +244,6 @@ body {
 		width: 100%;
 	}
 
-	// calculating all of the nesting paddings
-	$sel: '&';
-	@for $i from 0 through 6 {
-		// The folders should align with their contents because they're prefixed with their carets
-		#{$sel} ul > li.wm-toc-opener {
-			padding-left: calc(#{$toc-nest-ident} + #{($i + 1) * $toc-nest-ident});
-		}
-		#{$sel} ul:not(.wm-page-toc-tree) > li:not(.wm-toc-li-nested):not(.wm-toc-opener) {
-			padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
-		}
-		#{$sel} ul > li > ul.wm-page-toc-tree {
-			padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
-		}
-		$sel: selector-nest($sel, "li");
-	}
-
 	ul {
 		list-style: none;
 		margin-left: 0;
@@ -283,9 +266,6 @@ body {
 			&:hover:not(.wm-current) {
 				background-color: $gray;
 			}
-		}
-		a:hover {
-			text-decoration: none;
 		}
 		&.wm-current {
 			background-color: $main-color;
@@ -339,6 +319,22 @@ body {
 	}
 }
 
+// calculating all of the nesting paddings
+$sel: '.wm-toc-pane';
+@for $i from 0 through 6 {
+	// The folders should align with their contents because they're prefixed with their carets
+	#{$sel} ul > li.wm-toc-opener {
+		padding-left: calc(#{$toc-nest-ident} + #{($i + 1) * $toc-nest-ident});
+	}
+	#{$sel} ul:not(.wm-page-toc-tree) > li:not(.wm-toc-li-nested):not(.wm-toc-opener) {
+		padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
+	}
+	#{$sel} ul > li > ul.wm-page-toc-tree {
+		padding-left: calc(#{$toc-nest-ident} + #{$i * $toc-nest-ident});
+	}
+	$sel: selector-nest($sel, "li");
+}
+
 // This is neccessary because on small screens the toc is hidden by default but on large screens it should be visible
 .wm-toc-triggered {
 	& > .wm-toc-pane {
@@ -355,6 +351,7 @@ body {
 .wm-toc-pane, .wm-page-content, #mkdocs-search-results {
 	a, a:hover, a:focus, a:visited {
 		color: $main-color;
+		text-decoration: none;
 		outline: none;
 	}
 	a:hover, a:focus {
@@ -424,6 +421,10 @@ pre code {
 	font-size: 70%;
 	padding-left: .5em;
 	visibility: hidden;
+	text-decoration: none;
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 h1, h2, h3, h4, h5, h6 {
