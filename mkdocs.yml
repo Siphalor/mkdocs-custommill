@@ -15,8 +15,6 @@ theme:
   main_color: "#bb0000"
   gray: "#e0e0e0"
   lighter_gray: "#eeeeee"
-  date_time_format: "%Y-%m-%d %H:%M:%S %Z"
-  toc_depth: 2
 
 nav:
 - Usage: usage.md
