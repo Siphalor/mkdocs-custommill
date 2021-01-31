@@ -28,8 +28,7 @@ theme: custommill
 ```
 
 ## Demo and documentation
-
-More details generated from the included docs are coming soon ;)
+See [here](https://siphalor.github.io/mkdocs-custommill/) for a demo and some documentation :)
 
 ## Development
 
