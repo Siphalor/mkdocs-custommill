@@ -4,7 +4,7 @@
   [pypi-link]: https://pypi.python.org/pypi/mkdocs-custommill
 
 # CustomMill theme for [MkDocs](https://github.com/mkdocs/mkdocs/)
-Another iteration on the awesome Windmill theme for MkDocs. This is permitted by the MIT License.
+Another iteration on the awesome [Windmill theme](https://github.com/gristlabs/mkdocs-windmill) for MkDocs. This is permitted by the MIT License.
 
 Highlights:
 - Convenient navigation for larger documentation projects.
