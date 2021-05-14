@@ -92,6 +92,7 @@ ga('send', 'pageview');
 		{% include 'topbar.html' %}
 
 		<div id="main-content" class="wm-page-top-frame">
+			<h1 style="display:none;" aria-hidden="true">{{ page.title }}</h1>
 			{% include 'nav-pane.html' %}
 			<div class="wm-content-pane">
 				<iframe class="wm-article" name="article" src="{{ base_url }}/{{ config.theme.home or "home" }}" title="Page content"></iframe>
