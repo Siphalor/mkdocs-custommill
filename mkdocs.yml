@@ -1,6 +1,7 @@
 site_name: 'CustomMill MkDocs Theme'
 site_description: 'Another iteration on the awesome Windmill theme for MkDocs'
 site_author: 'Siphalor'
+site_url: https://siphalor.github.io/mkdocs-custommill
 
 repo_url: https://github.com/Siphalor/mkdocs-custommill
 
