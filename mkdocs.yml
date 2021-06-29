@@ -36,7 +36,7 @@ markdown_extensions:
 
 extra:
   history_buttons: false
-  version: v1.2.3
+  version: v1.2.4
   nav_links:
   - icon: twitter
     icon_type: brand
