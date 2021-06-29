@@ -93,9 +93,12 @@
 		a {
 			color: inherit;
 			text-decoration: inherit;
-		}
-		img {
-			height: 40px;
+			display: flex;
+			align-items: center;
+
+			img {
+				height: 40px;
+			}
 		}
 	}
 	.cm-navbar-group {
