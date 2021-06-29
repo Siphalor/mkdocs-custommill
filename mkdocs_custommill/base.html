@@ -149,6 +149,7 @@ ga('send', 'pageview');
 				</summary>
 				<h6 class="mt-2">Additional Licenses</h6>
 				<ul>
+					{%- block licenses -%}
 					<li>
 						CustomMill is based on the <a href="https://github.com/gristlabs/mkdocs-windmill" target="_blank">Windmill</a> theme by Grist Labs, licensed under the <a href="https://github.com/gristlabs/mkdocs-windmill/blob/master/LICENSE" target="_blank">MIT License</a>
 					</li>
@@ -164,6 +165,7 @@ ga('send', 'pageview');
 					<li>
 						Icons on this site are from <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> which is licensed under the <a href="https://fontawesome.com/license/free" target="_blank">Font Awesome Free License</a>.
 					</li>
+					{%- endblock -%}
 				</ul>
 				<p>Built at {{ build_date_utc.strftime(config.theme.date_time_format) }}</p>
 			</details>
