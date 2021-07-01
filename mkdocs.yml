@@ -14,7 +14,7 @@ theme:
   include_search_page: true
   home: usage
   main_color: "#bb0000"
-  gray: "#e0e0e0"
+  gray: "#d0d0d0"
   lighter_gray: "#eeeeee"
   date_time_format: "%Y-%m-%d %H:%M:%S %Z"
   toc_depth: 2
@@ -31,6 +31,7 @@ nav:
 
 markdown_extensions:
   - admonition
+  - pymdownx.tabbed
   - toc:
       permalink: '#'
 
