@@ -44,7 +44,12 @@ theme:
   lighter_gray: '#eeeeee'
 ```
 
-Note that it's important to set a `home` page that will be shown as front page. Specify the path to this page without the `.md` extension.
+!!! warning
+	Note that it's important to set a `home` page that will be shown as the front page. Specify the path to this page without the `.md` extension.
+
+	Additionally, since CustomMill generates it's own `index.html` file **you are not allowed to use `index.md`** as a top level file.
+
+	I suggest naming your landing page related to the content, like `usage.md` in these documents or `home.md` in more general scenarios.
 
 See [Customization](customization.md) for a few extra configuration options
 supported by the CustomMill theme.
