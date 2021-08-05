@@ -44,7 +44,7 @@ theme:
   lighter_gray: '#eeeeee'
 ```
 
-Note that it's important for there to set a `home` page that will be shown as front page. Specify the path to this page without the `.md` extension.
+Note that it's important to set a `home` page that will be shown as front page. Specify the path to this page without the `.md` extension.
 
 See [Customization](customization.md) for a few extra configuration options
 supported by the CustomMill theme.
