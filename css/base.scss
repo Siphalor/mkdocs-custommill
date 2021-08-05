@@ -319,6 +319,7 @@ body {
 
 	hr {
 		margin: 10px $toc-nest-ident / 2;
+		opacity: 1;
 	}
 }
 
@@ -479,7 +480,50 @@ h1, h2, h3, h4, h5, h6 {
 		margin-bottom: 0;
 	}
 	p:not(.admonition-title) {
-		padding: 0.5em 0.75rem;
+		padding: 0.5rem 0.75rem;
+	}
+}
+
+.tabbed-set {
+	display: flex;
+	position: relative;
+	flex-wrap: wrap;
+
+	.tabbed-content {
+		display: none;
+		order: 99;
+		width: 100%;
+		padding: 0.5rem 0.75rem;
+		border: 1px solid $main-color;
+
+		*:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	label {
+		width: auto;
+		padding: 0.3rem 1rem;
+		cursor: pointer;
+
+		&:hover {
+			background-color: $gray;
+		}
+	}
+
+	input {
+		position: absolute;
+		opacity: 0;
+
+		&:checked + label {
+			background-color: $main-color;
+			color: $lighter-gray;
+			font-weight: bold;
+
+			& + .tabbed-content {
+				display: block;
+			}
+		}
 	}
 }
 
