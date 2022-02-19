@@ -287,11 +287,12 @@ body {
 					margin-left: -$toc-nest-ident;
 					width: $toc-nest-ident;
 					@include transform(scale(0.5) translate(-50%, -10%));
+					transition: all 0.25s ease-out;
 				}
 			}
 			&.wm-toc-open {
 				& > span::before {
-					content: "\25BC \FE0E";
+					@include transform(scale(0.5) translate(-50%, -10%) rotate(90deg));
 				}
 			}
 		}
@@ -303,10 +304,11 @@ body {
 				vertical-align: middle;
 				text-align: right;
 				float: right;
-				@include transform(scale(0.5) translate(-50%, -10%));
+				@include transform(scale(0.5) translate(-50%, 0));
+				transition: all 0.25s ease-out;
 			}
 			&.wm-page-toc-open a::after {
-				content: "\25BC \FE0E";
+				@include transform(scale(0.5) translate(-50%, 0) rotate(90deg));
 			}
 		}
 		& > a:focus, & > span:focus {
