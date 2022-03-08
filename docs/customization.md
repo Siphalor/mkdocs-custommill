@@ -8,11 +8,17 @@ In addition, this theme supports a few additional options.
 ## `theme` configuration options
 Located on the `theme` key in your `mkdocs.yml`:
 
+- `home`: Sets the initial landing page.
+
 - `main_color`: Sets the main theme color of the site. This should be a somewhat dark color as it is also used for links.
 
 - `gray`: Sets the gray tone used for some borders.
 
 - `lighter_gray`: Sets the gray tone used for various backgrounds.
+
+- `date_time_format`: Date and time formatting used for the time stamps at the bottom of pages. Formatting is implemented using [strftime](https://strftime.org/).
+
+- `toc_depth`: The levels of headings to include in the table of contents in the navigation pane for the currently open page.
 
 
 ## `extra` configuration options
@@ -31,6 +37,7 @@ Located on the `extra` key in your `mkdocs.yml`:
   an Electron-based application.
 
 - `nav_links`: This defines the custom links above the table of contents. It is a list of objects with the following fields:
-	- `icon`: This indicates to what you link by using the given value as a Fontawesome icon. Possible values include `github`, `twitter`, `facebook`, `slack` and a lot more!
+	- `icon`: This indicates to what you link by using the given value as a [FontAwesome](https://fontawesome.com/icons) icon. Possible values include `github`, `twitter`, `facebook`, `slack` and a lot more!
+	- `icon_type`: This defines the FontAwesome icon class. You'll need to set this to `brand` to make use of brand icons like `twitter`. `brand` internally sets the `fab` class instead of the `fa` class.
 	- `text`: This sets the text that is being displayed
 	- `url`: Sets the links href

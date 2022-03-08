@@ -5,12 +5,10 @@
 			<img src="{{ base_url }}/{{ config.extra.logo }}" alt="{{config.site_name}} Logo" />
 			{% endif %}
 			<span>{{ config.site_name }}</span>
+			{% if config.extra.version %}
+			<span class="badge bg-light text-dark p-1 ms-1">{{ config.extra.version }}</span>
+			{% endif %}
 		</a>
-		{%- block version %}
-		{% if config.extra.version %}
-		<span class="badge bg-light text-dark p-1 ms-1">{{ config.extra.version }}</span>
-		{% endif %}
-		{%- endblock %}
 	</div>
 
 	<div class="cm-navbar-group placeholding">

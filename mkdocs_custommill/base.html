@@ -21,8 +21,8 @@
 		{%- endblock %}
 
 		{%- block styles %}
-		<link href="{{ base_url }}/css/bootstrap-5.0.0-beta.1.min.css" rel="stylesheet">
-		<link href="{{ base_url }}/css/font-awesome-4.7.0.min.css" rel="stylesheet">
+		<link href="{{ base_url }}/css/bootstrap-5.1.3.min.css" rel="stylesheet">
+		<link href="{{ base_url }}/css/font-awesome-5.12.2-all.min.css" rel="stylesheet">
 		<link href="{{ base_url }}/css/base.css" rel="stylesheet">
 		<link rel="stylesheet" href="{{ base_url }}/css/highlight-github.css">
 		{%- for path in extra_css %}
@@ -32,7 +32,7 @@
 
 		{%- block libs %}
 		<script src="{{ base_url }}/js/jquery-3.5.1.min.js"></script>
-		<script src="{{ base_url }}/js/bootstrap-5.0.0-beta.1.min.js"></script>
+		<script src="{{ base_url }}/js/bootstrap-5.1.3.min.js"></script>
 		<script src="{{ base_url }}/js/highlight.pack.js"></script>
 		{% if is_top %}
 		<script src="{{ base_url }}/js/elasticlunr.min.js"></script>
@@ -45,13 +45,13 @@
 			var home_url = '{{ base_url }}/{{ config.theme.home or "home" }}';
 			var is_outer_page = {{ 'true' if is_top else 'false' }};
 			{%- if page %}
-			{# Include the first two levels of TOC data as a JS object, to be rendered in top frame #}
+			{# Include levels of TOC data as a JS object, to be rendered in top frame #}
 			var pageToc = [
-				{%- for item in page.toc %}
+				{%- for item in page.toc recursive %}
 				{title: {{ item.title|tojson }}, url: {{ ('#_top' if loop.first else item.url)|tojson }}, children: [
-					{%- for item in item.children %}
-					{title: {{ item.title|tojson }}, url: {{ item.url|tojson }} },
-					{%- endfor %}
+					{%- if item.children and loop.depth < config.theme.toc_depth %}
+						{{ loop(item.children) }}
+					{%- endif %}
 				]},
 				{%- endfor %}
 			];
@@ -92,6 +92,7 @@ ga('send', 'pageview');
 		{% include 'topbar.html' %}
 
 		<div id="main-content" class="wm-page-top-frame">
+			<h1 style="display:none;" aria-hidden="true">{{ page.title }}</h1>
 			{% include 'nav-pane.html' %}
 			<div class="wm-content-pane">
 				<iframe class="wm-article" name="article" src="{{ base_url }}/{{ config.theme.home or "home" }}" title="Page content"></iframe>
@@ -146,13 +147,14 @@ ga('send', 'pageview');
 				<summary>
 					Documentation built with <a href="http://www.mkdocs.org/" target="_blank">MkDocs</a> using  <a href="https://github.com/Siphalor/mkdocs-custommill" target="_blank">CustomMill</a>.
 				</summary>
-				<h6 class="mt-2">Additional License and Usage Information</h6>
+				<h6 class="mt-2">Additional Licenses</h6>
 				<ul>
+					{%- block licenses -%}
 					<li>
 						CustomMill is based on the <a href="https://github.com/gristlabs/mkdocs-windmill" target="_blank">Windmill</a> theme by Grist Labs, licensed under the <a href="https://github.com/gristlabs/mkdocs-windmill/blob/master/LICENSE" target="_blank">MIT License</a>
 					</li>
 					<li>
-						CustomMill includes <a href="https://getbootstrap.com" target="_blank">Bootstrap</a> version 4.4.1. This is available under the <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT License</a>.
+						CustomMill includes <a href="https://getbootstrap.com" target="_blank">Bootstrap</a> version 5 Beta 1. This is available under the <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT License</a>.
 					</li>
 					<li>
 						CustomMill includes <a href="https://jquery.org" target="_blank">jQuery</a> version 3.2.1. This is available under the <a href="https://jquery.org/license" target="_blank">MIT License</a>.
@@ -161,9 +163,11 @@ ga('send', 'pageview');
 						Syntax highlighting is implemented via <a href="https://highlightjs.org" target="_blank">highlight.js</a> licensed under the BSD 3-Clause License and the included github styling made by Vasily Polovnyov.
 					</li>
 					<li>
-						Icons on this site are from <a href="https://fontawesome.com/v4.7.0/" target="_blank">FontAwesome v4.7.0</a> which is licensed as <a href="http://scripts.sil.org/OFL" target="_blank">SIL OFL 1.1</a>.
+						Icons on this site are from <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> which is licensed under the <a href="https://fontawesome.com/license/free" target="_blank">Font Awesome Free License</a>.
 					</li>
+					{%- endblock -%}
 				</ul>
+				<p>Built at {{ build_date_utc.strftime(config.theme.date_time_format) }}</p>
 			</details>
 			{%- endblock %}
 		</footer>
