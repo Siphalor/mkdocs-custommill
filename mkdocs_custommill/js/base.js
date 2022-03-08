@@ -204,16 +204,22 @@ function onResize() {
 			document.getElementById('wm-search-form').classList.remove('show');
 			article.setAttribute('scrolling', 'no');
 		}
-		var height = document.getElementsByClassName('navbar')[0].getBoundingClientRect().height;
-		document.getElementsByClassName('wm-toc-pane')[0].style.top = height + 'px';
 		document.getElementsByClassName('wm-content-pane')[0].style.height = innerWindow.document.body.offsetHeight + 20 + 'px';
 	} else {
 		document.getElementById('wm-search-form')
 		document.getElementById('wm-search-form').classList.add('show');
 		document.getElementsByClassName('wm-content-pane')[0].removeAttribute('style');
 		document.getElementsByClassName('wm-article')[0].setAttribute('scrolling', 'auto');
-		document.getElementsByClassName('wm-toc-pane')[0].style.top = 0;
 	}
+	repositionTocPane();
+}
+
+function repositionTocPane() {
+	var height = '0';
+	if (isSmallScreen()) {
+		height = document.getElementsByClassName('navbar')[0].getBoundingClientRect().height + ' px';
+	}
+	document.getElementsByClassName('wm-toc-pane')[0].style.top = 0;
 }
 
 /**
@@ -226,6 +232,7 @@ function closeTempItems() {
 		});
 	}
 	getCollapse(document.getElementById('mkdocs-search-results')).hide();
+	repositionTocPane();
 }
 
 /**
@@ -257,7 +264,7 @@ function initMainWindow() {
 		if (isSmallScreen()) {
 			window.scroll(0,0);
 		}
-		document.getElementById('main-content').classList.remove('wm-toc-triggered');
+		document.getElementById('main-content').classList.toggle('wm-toc-triggered');
 	});
 
 	window.addEventListener('resize', onResize);
@@ -320,6 +327,7 @@ function initMainWindow() {
 function onInnerWindowUpdated() {
 	window.history.replaceState(null, '', getAbsUrl('#', getRelPath('/', innerWindow.location.href).replace('#', '~')));
 	getCollapse(document.getElementById('mkdocs-search-results')).hide();
+	repositionTocPane();
 }
 
 function onIframeBeforeLoad(url) {
@@ -411,12 +419,14 @@ function renderPageToc(parentElem, pageUrl, pageToc) {
 		collapseAndRemove(ele);
 	});
 
-	parentElem.classList.add('wm-page-toc-opener');
-	toggleClass(parentElem, 'wm-page-toc-open', showPageToc);
 	var li = document.createElement('li');
 	li.setAttribute('class', 'wm-page-toc wm-toc-li-nested collapse');
 	li.appendChild(ul);
 	parentElem.insertAdjacentElement('afterend', li);
+
+	parentElem.classList.add('wm-page-toc-opener');
+	toggleClass(parentElem, 'wm-page-toc-open', showPageToc);
+	toggleCollapse(getCollapse(li), showPageToc);
 }
 
 var searchIndexReady = false;
@@ -432,35 +442,44 @@ function initSearch() {
 		this.addField('text');
 	});
 
-	var searchBox = $('#mkdocs-search-query');
-	var searchResults = $('#mkdocs-search-results');
+	var searchBox = document.getElementById('mkdocs-search-query');
+	var searchResults = document.getElementById('mkdocs-search-results');
 
 	// Fetch the prebuilt index data, and add to the index.
-	$.getJSON(base_url + '/search/search_index.json')
-		.done(function(data) {
-			data.docs.forEach(function(doc) {
-				searchIndex.addDoc(doc);
-			});
-			searchIndexReady = true;
-			$(document).trigger('searchIndexReady');
-		});
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState === 4) {
+			if (req.status === 200) {
+				var data = JSON.parse(req.responseText);
+				data.docs.forEach(function(doc) {
+					searchIndex.addDoc(doc);
+				});
+				searchIndexReady = true;
+				var evt = document.createEvent('Event');
+				evt.initEvent('searchIndexReady', true, true);
+				document.dispatchEvent(evt);
+			}
+		}
+	};
+	req.open('GET', base_url + '/search/search_index.json', true);
+	req.send();
 
 	function showSearchResults(optShow) {
-		var show = (optShow === false ? false : Boolean(searchBox.val()));
+		var show = (optShow === false ? false : Boolean(searchBox.value));
 		if (show) {
 			doSearch({
 				resultsElem: searchResults,
-				query: searchBox.val(),
+				query: searchBox.value,
 				snippetLen: 100,
 				limit: 10
 			});
 		}
-		searchResults.collapse(show ? 'show' : 'hide');
+		toggleCollapse(getCollapse(searchResults), show);
 		return show;
 	}
 
-	searchBox.on('click', function(e) {
-		if (!searchResults.hasClass('show')) {
+	searchBox.addEventListener('click', function(e) {
+		if (!searchResults.classList.contains('show')) {
 			if (showSearchResults()) {
 				e.stopPropagation();
 			}
@@ -468,35 +487,44 @@ function initSearch() {
 	});
 
 	// Search automatically and show results on keyup event.
-	searchBox.on('keyup', function(e) {
+	searchBox.addEventListener('keyup', function(e) {
 		var show = (e.which !== Keys.ESCAPE && e.which !== Keys.ENTER);
 		showSearchResults(show);
 	});
 
 	// Open the search box (and run the search) on up/down arrow keys.
-	searchBox.on('keydown', function(e) {
+	searchBox.addEventListener('keydown', function(e) {
 		if (e.which === Keys.UP || e.which === Keys.DOWN) {
 			if (showSearchResults()) {
 				e.stopPropagation();
 				e.preventDefault();
 				setTimeout(function() {
-					searchResults.find('a').eq(e.which === Keys.UP ? -1 : 0).focus();
+					results = searchResults.getElementsByTagName('a');
+					if (e.which === Keys.UP) {
+						results[results.length - 1].focus();
+					} else {
+						results[0].focus();
+					}
 				}, 0);
 			}
 		}
 	});
 
-	searchResults.on('keydown', function(e) {
+	searchResults.addEventListener('keydown', function(e) {
 		if (e.which === Keys.UP || e.which === Keys.DOWN) {
-			if (searchResults.find('a').eq(e.which === Keys.UP ? 0 : -1)[0] === e.target) {
+			if (
+				Array.from(document.getElementsByTagName('a')).slice(
+					e.which === Keys.UP ? 0 : -1
+				)[0] === e.target
+			) {
 				searchBox.focus();
 				e.stopPropagation();
 				e.preventDefault();
 			} else {
 				if (e.which === Keys.UP) {
-					$(e.target).prevAll('a')[0].focus();
+					e.target.nextElementSibling.focus();
 				} else {
-					$(e.target).nextAll('a')[0].focus();
+					e.target.previousElementSibling.focus();
 				}
 			}
 		} else if (e.which !== Keys.ENTER) {
@@ -541,12 +569,12 @@ SnippetBuilder.prototype.getSnippet = function(text, len) {
  */
 function doSearch(options) {
 	var resultsElem = options.resultsElem;
-	resultsElem.empty();
+	resultsElem.innerHTML = '';
 
 	// If the index isn't ready, wait for it, and search again when ready.
 	if (!searchIndexReady) {
-		resultsElem.append($('<a class="dropdown-item disabled">SEARCHING...</a>'));
-		$(document).one('searchIndexReady', function() { doSearch(options); });
+		resultsElem.innerHTML = '<a class="dropdown-item disabled">SEARCHING...</a>';
+		document.addEventListener('searchIndexReady', function() { doSearch(options) }, { once: true });
 		return;
 	}
 
@@ -568,23 +596,40 @@ function doSearch(options) {
 		for (var i = 0; i < len; i++) {
 			var doc = searchIndex.documentStore.getDoc(results[i].ref);
 			var snippet = snippetBuilder.getSnippet(doc.text, snippetLen);
-			resultsElem.append(
-				$('<a class="dropdown-item">').attr('href', limit == 0 ? doc.location : pathJoin(base_url, doc.location))
-				.append($('<h6 class="dropdown-header">').text(doc.title))
-				.append($('<p>').html(snippet))
-			);
+			var item = document.createElement('a');
+			item.classList.add('dropdown-item');
+			item.setAttribute('href', limit == 0 ? doc.location : pathJoin(base_url, doc.location));
+			var header = document.createElement('h6');
+			header.classList.add('dropdown-header');
+			header.innerHTML = doc.title;
+			var text = document.createElement('p');
+			text.innerHTML = snippet;
+			item.appendChild(header);
+			item.appendChild(text);
+			resultsElem.appendChild(item);
 		}
 		if (limit != 0) {
-			resultsElem.find('a').each(function() { adjustLink(this); });
+			Array.from(resultsElem.getElementsByTagName('a')).forEach(adjustLink);
 		}
 		if (limit) {
-			resultsElem.append($('<div class="dropdown-divider" role="separator"></div>'));
-			resultsElem.append($(
-				'<a class="dropdown-item" href="' + base_url + '/search.html?q=' + query + '" id="search-show-all" target="article">' +
-				'SEE ALL RESULTS</a>'));
+			var divider = document.createElement('div');
+			divider.classList.add('dropdown-divider');
+			divider.setAttribute('role', 'separator');
+			resultsElem.appendChild(divider);
+			var allResults = document.createElement('a');
+			allResults.classList.add('dropdown-item');
+			allResults.id = 'search-show-all';
+			allResults.setAttribute('target', 'article');
+			allResults.href = base_url + '/search.html?q=' + query;
+			allResults.innerHTML = 'SEE ALL RESULTS';
+			resultsElem.appendChild(allResults);
 		}
 	} else {
-		resultsElem.append($('<a class="dropdown-item disabled">NO RESULTS FOUND</a>'));
+		var noResults = document.createElement('a');
+		noResults.classList.add('dropdown-item');
+		noResults.classList.add('disabled');
+		noResults.innerHTML = 'NO RESULTS FOUND';
+		resultsElem.appendChild(noResults);
 	}
 }
 
