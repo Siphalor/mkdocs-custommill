@@ -71,8 +71,8 @@ CustomMill uses and includes Bootstrap, licensed as following
 
 The MIT License (MIT)
 
-Copyright (c) 2011-2020 Twitter, Inc.
-Copyright (c) 2011-2020 The Bootstrap Authors
+Copyright (c) 2011-2022 Twitter, Inc.
+Copyright (c) 2011-2022 The Bootstrap Authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -139,9 +139,3 @@ CustomMill uses and includes elasticlunr, licensed as following
 Licensed as MIT with:
 	Copyright (C) 2016 Oliver Nightingale
 	Copyright (C) 2016 Wei Song
-
-----------------------------------------------------------------------
-CustomMill uses and includes jQuery v3.2.1, licensed as following
-----------------------------------------------------------------------
-
-Licensed as MIT with Copyright JS Foundations and other contributors (see https://jquery.org/license).
