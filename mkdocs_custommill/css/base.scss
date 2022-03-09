@@ -230,7 +230,7 @@ body {
 	margin-left: 0px;
 	@include transition(margin-left 0.3s);
 
-	@include media-breakpoint-up(md) {
+	@include media-breakpoint-down(md) {
 		// On small screens the toc starts hidden
 		// Also a bit more left because of the shadow
 		top: auto;
@@ -343,7 +343,7 @@ $sel: '.wm-toc-pane';
 .wm-toc-triggered {
 	& > .wm-toc-pane {
 		margin-left: -250px;
-		@include media-breakpoint-up(md) {
+		@include media-breakpoint-down(md) {
 			margin-left: 0px;
 		}
 	}
