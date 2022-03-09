@@ -9,7 +9,7 @@
 
   <script>
     window.top.doSearch({
-      resultsElem: $('#mkdocs-search-results'),
+      resultsElem: document.getElementById('mkdocs-search-results'),
       query: getParam('q'),
       snippetLen: 200,
       limit: 0
