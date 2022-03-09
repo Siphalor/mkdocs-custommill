@@ -112,15 +112,16 @@
 		}
 	}
 	#wm-search-form {
+		padding: 0;
+		div {
+			padding: 0.25rem;
+		}
+
 		@include flex(2 2 100%);
+
 		@media (min-width: 768px) {
 			@include flex(0 0);
 			min-width: min(15em, 80vw);
-		}
-		& > * {
-			@media (max-width: 767.98px) {
-				width: 100%;
-			}
 		}
 	}
 }
@@ -221,7 +222,7 @@ body {
 
 .wm-toc-pane {
 	position: absolute;
-	top: 0;
+	top: 50px;
 	height: 100%;
 	min-width: 250px;
 	max-width: 250px;
@@ -229,13 +230,14 @@ body {
 	background-color: $lighter-gray;
 	border-right: 1px solid $gray;
 	border-bottom: 1px solid $gray;
-	padding: 70px 1rem 2rem;
+	padding: 1rem;
 	margin-left: 0px;
 	@include transition(margin-left 0.3s);
 
 	@media (max-width: 767.98px) {
 		// On small screens the toc starts hidden
 		// Also a bit more left because of the shadow
+		top: auto;
 		margin-left: -260px;
 		height: auto;
 		@include box-shadow(2px 3px 4px 0 $gray);
@@ -378,7 +380,7 @@ $sel: '.wm-toc-pane';
 // FOOTER
 
 footer {
-	padding-bottom: 2rem;
+	margin-bottom: 0.5rem;
 	details ul {
 		padding-left: 0;
 		list-style: '- ';
@@ -436,6 +438,18 @@ pre code {
 h1, h2, h3, h4, h5, h6 {
 	&:hover .headerlink {
 		visibility: visible;
+	}
+}
+
+td, th {
+	&[align=left] {
+		text-align: left;
+	}
+	&[align=center] {
+		text-align: center;
+	}
+	&[align=right] {
+		text-align: right;
 	}
 }
 
