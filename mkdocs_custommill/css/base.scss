@@ -322,7 +322,7 @@ body {
 	}
 
 	hr {
-		margin: 10px $toc-nest-ident / 2;
+		margin: 10px calc($toc-nest-ident / 2);
 		opacity: 1;
 	}
 }
