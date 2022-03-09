@@ -211,15 +211,6 @@ function onResize() {
 		document.getElementsByClassName('wm-content-pane')[0].removeAttribute('style');
 		document.getElementsByClassName('wm-article')[0].setAttribute('scrolling', 'auto');
 	}
-	repositionTocPane();
-}
-
-function repositionTocPane() {
-	var height = '0';
-	if (isSmallScreen()) {
-		height = document.getElementsByClassName('navbar')[0].getBoundingClientRect().height + ' px';
-	}
-	document.getElementsByClassName('wm-toc-pane')[0].style.top = 0;
 }
 
 /**
@@ -232,7 +223,6 @@ function closeTempItems() {
 		});
 	}
 	getCollapse(document.getElementById('mkdocs-search-results')).hide();
-	repositionTocPane();
 }
 
 /**
@@ -327,7 +317,6 @@ function initMainWindow() {
 function onInnerWindowUpdated() {
 	window.history.replaceState(null, '', getAbsUrl('#', getRelPath('/', innerWindow.location.href).replace('#', '~')));
 	getCollapse(document.getElementById('mkdocs-search-results')).hide();
-	repositionTocPane();
 }
 
 function onIframeBeforeLoad(url) {
