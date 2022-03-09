@@ -226,7 +226,7 @@ function closeTempItems() {
 }
 
 /**
- * Adjusts link to point to a top page, converting URL from "base/path" to "base#path". It also
+ * Adjusts link to point to a top page, converting URL from "base/path#tag" to "base#path~tag". It also
  * sets a data-adjusted attribute on the link, to skip adjustments on future clicks.
  */
 function adjustLink(linkEl) {
