@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "832d49d830a85f10fadaa4955faa294f385198988eefa837bf4ada09513ff9a8"
+            "sha256": "852e9f2c40d75a81e4238804990640660ee0a9400bafe89ff7c227c6d122f691"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,10 +32,10 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:175f4ee440a0317f6e8d81b7f8d4869f93316170a65ad2b007d2929186c8052c",
-                "sha256:e0bc84ff355328a4adfc5240c4f211e0ab386f80aa640d1b11f0618a1d282094"
+                "sha256:b36ffa925fe3139b2f6ff11d6925ffd4fa7bc47870165e3ac260ac7b4f91e6ac",
+                "sha256:d16e8c1deb60de41b8e8ed21c1a7b947b0bc62fab7e1d470bcdf331cea2e6735"
             ],
-            "version": "==4.11.1"
+            "version": "==4.11.2"
         },
         "jinja2": {
             "hashes": [
@@ -110,6 +110,9 @@
             ],
             "index": "pypi",
             "version": "==1.2.3"
+        },
+        "mkdocs-exclude": {
+            "git": "https://github.com/Siphalor/mkdocs-exclude.git"
         },
         "packaging": {
             "hashes": [

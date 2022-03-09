@@ -7,6 +7,9 @@ name = "pypi"
 mkdocs = "~=1.2"
 pymdown-extensions = "*"
 
+[packages.mkdocs-exclude]
+git = "https://github.com/Siphalor/mkdocs-exclude.git"
+
 [dev-packages]
 
 [requires]

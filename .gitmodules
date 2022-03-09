@@ -1,0 +1,3 @@
+[submodule "mkdocs_custommill/bootstrap"]
+	path = mkdocs_custommill/bootstrap
+	url = https://github.com/twbs/bootstrap

@@ -100,7 +100,7 @@ function endsWith(str, suffix) { return str.indexOf(suffix, str.length - suffix.
 function onActivate(sel, fun) {
 	forEach(document.querySelectorAll(sel), function(ele) {
 		ele.addEventListener('click', function() { fun(ele); });
-		ele.addEventListener('keydown', function() {
+		ele.addEventListener('keydown', function(e) {
 			if (e.which === 13 || e.which === 32) {
 				fun(ele);
 			}
@@ -495,7 +495,7 @@ function initSearch() {
 				e.stopPropagation();
 				e.preventDefault();
 				setTimeout(function() {
-					results = searchResults.getElementsByTagName('a');
+					var results = searchResults.getElementsByTagName('a');
 					if (e.which === Keys.UP) {
 						results[results.length - 1].focus();
 					} else {
@@ -507,23 +507,7 @@ function initSearch() {
 	});
 
 	searchResults.addEventListener('keydown', function(e) {
-		if (e.which === Keys.UP || e.which === Keys.DOWN) {
-			if (
-				Array.from(document.getElementsByTagName('a')).slice(
-					e.which === Keys.UP ? 0 : -1
-				)[0] === e.target
-			) {
-				searchBox.focus();
-				e.stopPropagation();
-				e.preventDefault();
-			} else {
-				if (e.which === Keys.UP) {
-					e.target.nextElementSibling.focus();
-				} else {
-					e.target.previousElementSibling.focus();
-				}
-			}
-		} else if (e.which !== Keys.ENTER) {
+		if (e.which !== Keys.ENTER) {
 			searchBox.focus();
 		}
 	});
@@ -621,11 +605,7 @@ function doSearch(options) {
 			resultsElem.appendChild(allResults);
 		}
 	} else {
-		var noResults = document.createElement('a');
-		noResults.classList.add('dropdown-item');
-		noResults.classList.add('disabled');
-		noResults.innerHTML = 'NO RESULTS FOUND';
-		resultsElem.appendChild(noResults);
+		resultsElem.innerHTML = '<span class="dropdown-item-text">NO RESULTS FOUND</span>';
 	}
 }
 

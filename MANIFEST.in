@@ -1,3 +1,11 @@
-recursive-include mkdocs_custommill *.ico *.js *.css *.png *.html *.eot *.svg *.ttf *.woff *.woff2 *mkdocs_theme.yml
+include mkdocs_custommill/mkdocs_theme.yml mkdocs_custommill/*.html mkdocs_custommill/__init__.py
+recursive-include mkdocs_custommill/css *.css
+graft mkdocs_custommill/img
+recursive-include mkdocs_custommill/js *.js
+graft mkdocs_custommill/webfonts
+
+include mkdocs_custommill/bootstrap/dist/css/bootstrap.min.css
+include mkdocs_custommill/bootstrap/dist/js/bootstrap.min.css
+
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

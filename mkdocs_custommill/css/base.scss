@@ -1,4 +1,8 @@
 @use "config.scss" as *;
+@import "../bootstrap/scss/functions";
+@import "../bootstrap/scss/mixins";
+@import "../bootstrap/scss/variables";
+@import "../bootstrap/scss/root";
 
 // MIXINS
 
@@ -62,14 +66,6 @@
 	box-shadow: $value;
 }
 
-// UTILS
-
-.collapsing.width {
-	height: unset;
-	width: 0;
-	@include transition(width .35s ease);
-}
-
 // NAVBAR
 
 .navbar {
@@ -78,7 +74,7 @@
 	padding: 0.25rem;
 	@include justify-space-between;
 
-	@media (min-width: 768px) {
+	@include media-breakpoint-up(md) {
 		height: 50px;
 		position: fixed;
 		top: 0;
@@ -113,13 +109,13 @@
 	}
 	#wm-search-form {
 		padding: 0;
-		div {
+		> div {
 			padding: 0.25rem;
 		}
 
 		@include flex(2 2 100%);
 
-		@media (min-width: 768px) {
+		@include media-breakpoint-up(md) {
 			@include flex(0 0);
 			min-width: min(15em, 80vw);
 		}
@@ -168,7 +164,7 @@ body {
 	background-color: $lighter-gray;
 	&.outer-page {
 		overflow: hidden;
-		@media (max-width: 767.98px) {
+		@include media-breakpoint-down(md) {
 			overflow: visible;
 		}
 	}
@@ -201,7 +197,7 @@ body {
 
 	padding-left: 0;
 	// resize content when toc is open on larger screens
-	@media (min-width: 768px) {
+	@include media-breakpoint-up(md) {
 		padding-left: 250px;
 		@include transition(padding-left 0.3s);
 		position: absolute;
@@ -234,7 +230,7 @@ body {
 	margin-left: 0px;
 	@include transition(margin-left 0.3s);
 
-	@media (max-width: 767.98px) {
+	@include media-breakpoint-up(md) {
 		// On small screens the toc starts hidden
 		// Also a bit more left because of the shadow
 		top: auto;
@@ -347,7 +343,7 @@ $sel: '.wm-toc-pane';
 .wm-toc-triggered {
 	& > .wm-toc-pane {
 		margin-left: -250px;
-		@media (max-width: 767.98px) {
+		@include media-breakpoint-up(md) {
 			margin-left: 0px;
 		}
 	}
