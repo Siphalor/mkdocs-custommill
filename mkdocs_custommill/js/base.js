@@ -326,7 +326,9 @@ function onIframeBeforeLoad(url) {
 	closeTempItems();
 
 	var tocLi = getTocLi(url);
-	tocLi.classList.add('wm-current');
+	if (tocLi) {
+		tocLi.classList.add('wm-current');
+	}
 	for (; tocLi && !tocLi.classList.contains('wm-toc-pane'); tocLi = tocLi.parentElement) {
 		if (tocLi.classList.contains('wm-toc-li-nested')) {
 			tocLi.classList.remove('collapsing');
@@ -341,7 +343,12 @@ function onIframeBeforeLoad(url) {
 function getTocLi(url) {
 	var relPath = getRelPath('/', cleanUrlPath(url));
 	var selector = '.wm-article-link[href="' + relPath + '"]';
-	return document.querySelector(selector).parentElement;
+	var elem = document.querySelector(selector);
+	if (elem) {
+		return elem.parentElement;
+	} else {
+		return null;
+	}
 }
 
 var _deferIframeLoad = false;
