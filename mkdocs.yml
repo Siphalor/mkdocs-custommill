@@ -1,3 +1,4 @@
+---
 site_name: 'CustomMill MkDocs Theme'
 site_description: 'Another iteration on the awesome Windmill theme for MkDocs'
 site_author: 'Siphalor'
@@ -20,14 +21,14 @@ theme:
   toc_depth: 2
 
 nav:
-- Usage: usage.md
-- Customization: customization.md
-- Samples:
-  - Sample Page A: sample-a.md
-  - Sample Subfolder:
-    - Sample Subpage A1: a/sample-a1.md
-    - Sample Subpage A2: a/sample-a2.md
-  - Sample Page B: sample-b.md
+  - Usage: usage.md
+  - Customization: customization.md
+  - Samples:
+      - Sample Page A: sample-a.md
+      - Sample Subfolder:
+          - Sample Subpage A1: a/sample-a1.md
+          - Sample Subpage A2: a/sample-a2.md
+      - Sample Page B: sample-b.md
 
 markdown_extensions:
   - admonition
@@ -39,7 +40,7 @@ extra:
   history_buttons: false
   version: v1.2.7
   nav_links:
-  - icon: twitter
-    icon_type: brand
-    text: Siphalor
-    url: https://twitter.com/Siphalor
+    - icon: twitter
+      icon_type: brand
+      text: Siphalor
+      url: https://twitter.com/Siphalor
