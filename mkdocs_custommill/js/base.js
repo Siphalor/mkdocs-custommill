@@ -196,6 +196,13 @@ function onResize() {
 }
 
 /**
+ * Gets the dropdown for the search results menu
+ */
+function getSearchResultsDropdown() {
+	return bootstrap.Dropdown.getOrCreateInstance(document.getElementById('mkdocs-search-results-toggle'));
+}
+
+/**
  * Close TOC on small screens and hide the search
  */
 function closeTempItems() {
@@ -203,7 +210,7 @@ function closeTempItems() {
 		forEach(document.getElementsByClassName('wm-toc-triggered'), ele => {
 			ele.classList.remove('wm-toc-triggered');
 		});
-		getCollapse(document.getElementById('mkdocs-search-results')).hide();
+		getSearchResultsDropdown().hide();
 	}
 }
 
@@ -296,7 +303,7 @@ function initMainWindow() {
 
 function onInnerWindowUpdated() {
 	window.history.replaceState(null, '', getAbsUrl('#', getRelPath('/', innerWindow.location.href).replace('#', '~')));
-	getCollapse(document.getElementById('mkdocs-search-results')).hide();
+	getSearchResultsDropdown().hide();
 }
 
 function onIframeBeforeLoad(url) {
@@ -344,6 +351,7 @@ function onIframeLoad() {
 	var url = innerWindow.location.href;
 	onIframeBeforeLoad(url);
 	innerWindow.addEventListener('hashchange', onInnerWindowUpdated);
+	innerWindow.addEventListener('click', () => getSearchResultsDropdown().hide(), { capture: true });
 
 	if (innerWindow.pageToc) {
 		var relPath = getAbsUrl('#', getRelPath('/', cleanUrlPath(url)));
@@ -444,7 +452,7 @@ function initSearch() {
 				limit: 10
 			});
 		}
-		toggleCollapse(getCollapse(searchResults), show);
+		toggleCollapse(getSearchResultsDropdown(), show);
 		return show;
 	}
 
