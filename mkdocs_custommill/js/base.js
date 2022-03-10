@@ -547,8 +547,15 @@ function doSearch(options) {
 	var snippetBuilder = new SnippetBuilder(query);
 	if (results.length > 0){
 		var len = Math.min(results.length, limit || Infinity);
+		var lastDoc; // Used to check for duplicate results due to nesting of headings
 		for (var i = 0; i < len; i++) {
 			var doc = searchIndex.documentStore.getDoc(results[i].ref);
+
+			if (lastDoc && lastDoc.location.startsWith(doc.location) && doc.text.includes(lastDoc.text)) {
+				continue;
+			}
+			lastDoc = doc;
+
 			var item = document.createElement('a');
 			item.classList.add('dropdown-item');
 			item.setAttribute('href', limit == 0 ? doc.location : pathJoin(base_url, doc.location));
