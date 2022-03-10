@@ -1,14 +1,20 @@
 # CustomMill theme
 
-## About
+## Features
 
-CustomMill theme focuses on clean usable navigation for large documentation projects. It retains the state of the menu of pages and folders across page transitions, by keeping navigation to an iframe.
+- Clean navigation for large documentation projects
+- Retains the state of the menu across page transitions
+- Versatile search with term highlighting in a quick search and on its own page
+- Supports syntax highlighting within pages
+- Deep nesting of pages in folders
 
-It also implements a versatile search, featuring term highlighting, and both a quick dropdown and a full-page option that allows the user to come back to search results.
+## Improvements over Windmill
 
-Within pages, it uses the default mkdocs theme, including syntax highlighting.
-
-One of the key features is the support of deep nesting of pages into folders.
+- Customizable colors!
+- Customizable links in the navigation menu
+- A lot of small stylistic and design fixes
+- Better search result listing
+- Bootstrap 5 and no more jQuery
 
 ## Installation
 
