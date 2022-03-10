@@ -34,17 +34,6 @@ function forEach(iterable, fun) {
 	}
 }
 
-function toggleClass(ele, clazz, value) {
-	if (!ele) {
-		return;
-	}
-	if (value) {
-		ele.classList.add(clazz);
-	} else {
-		ele.classList.remove(clazz);
-	}
-}
-
 function toggleCollapse(collapse, value) {
 	if (value) {
 		collapse.show();
@@ -60,7 +49,7 @@ function getCollapse(ele) {
 
 if (is_outer_page) {
 	// Main window.
-	onReady(document, function() {
+	onReady(document, () => {
 		innerWindow = document.getElementsByClassName('wm-article')[0].contentWindow;
 		initMainWindow();
 		ensureIframeLoaded();
@@ -82,25 +71,22 @@ if (is_outer_page) {
 	// Other initialization of iframe contents.
 	hljs.initHighlightingOnLoad();
 	onReady(document, function() {
-		forEach(document.getElementsByTagName('table'), function(table) {
+		forEach(document.getElementsByTagName('table'), table => {
 			TABLE_CLASSES.forEach(function(clazz) { table.classList.add(clazz); });
 		});
-		forEach(document.querySelectorAll('a[href*="://"]'), function(link) {
+		forEach(document.querySelectorAll('a[href*="://"]'), link => {
 			link.target = '_blank';
 		});
 	});
 }
 
-function startsWith(str, prefix) { return str.lastIndexOf(prefix, 0) === 0; }
-function endsWith(str, suffix) { return str.indexOf(suffix, str.length - suffix.length) !== -1; }
-
 /**
  * Creates event handlers for click and the enter key
  */
 function onActivate(sel, fun) {
-	forEach(document.querySelectorAll(sel), function(ele) {
-		ele.addEventListener('click', function() { fun(ele); });
-		ele.addEventListener('keydown', function(e) {
+	forEach(document.querySelectorAll(sel), ele => {
+		ele.addEventListener('click', () => fun(ele));
+		ele.addEventListener('keydown', e => {
 			if (e.which === 13 || e.which === 32) {
 				fun(ele);
 			}
@@ -128,15 +114,15 @@ function qualifyUrl(url) {
  * Turns an absolute path to relative, stripping out rootUrl + separator.
  */
 function getRelPath(separator, absUrl) {
-	var prefix = rootUrl + (endsWith(rootUrl, separator) ? '' : separator);
-	return startsWith(absUrl, prefix) ? absUrl.slice(prefix.length) : null;
+	var prefix = rootUrl + (rootUrl.endsWith(separator) ? '' : separator);
+	return absUrl.startsWith(prefix) ? absUrl.slice(prefix.length) : null;
 }
 
 /**
  * Turns a relative path to absolute, adding a prefix of rootUrl + separator.
  */
 function getAbsUrl(separator, relPath) {
-	var sep = endsWith(rootUrl, separator) ? '' : separator;
+	var sep = rootUrl.endsWith(separator) ? '' : separator;
 	return relPath === null ? null : rootUrl + sep + relPath;
 }
 
@@ -147,7 +133,7 @@ function getAbsUrl(separator, relPath) {
  */
 function updateIframe(enableForwardNav) {
 	// Grey out the "forward" button if we don't expect 'forward' to work.
-	toggleClass(document.getElementById('hist-fwd'), 'bg-gray', !enableForwardNav);
+	document.getElementById('hist-fwd').classList.toggle('bg-gray', !enableForwardNav);
 
 	var targetRelPath = (getRelPath('#', outerWindow.location.href) || "").replace("~", "#");
 	var targetIframeUrl;
@@ -184,13 +170,7 @@ function _safeGetLocationHref(location) {
  * Returns the value of the given parameter in the URL's query portion.
  */
 function getParam(key) {
-	var params = window.location.search.substring(1).split('&');
-	for (var i = 0; i < params.length; i++) {
-		var param = params[i].split('=');
-		if (param[0] === key) {
-			return decodeURIComponent(param[1].replace(/\+/g, '%20'));
-		}
-	}
+	return new URLSearchParams(document.location.search).get(key);
 }
 
 /**
@@ -206,7 +186,6 @@ function onResize() {
 		}
 		document.getElementsByClassName('wm-content-pane')[0].style.height = innerWindow.document.body.offsetHeight + 20 + 'px';
 	} else {
-		document.getElementById('wm-search-form')
 		document.getElementById('wm-search-form').classList.add('show');
 		document.getElementsByClassName('wm-content-pane')[0].removeAttribute('style');
 		document.getElementsByClassName('wm-article')[0].setAttribute('scrolling', 'auto');
@@ -218,7 +197,7 @@ function onResize() {
  */
 function closeTempItems() {
 	if (isSmallScreen()) {
-		forEach(document.getElementsByClassName('wm-toc-triggered'), function(ele) {
+		forEach(document.getElementsByClassName('wm-toc-triggered'), ele => {
 			ele.classList.remove('wm-toc-triggered');
 		});
 	}
@@ -226,8 +205,7 @@ function closeTempItems() {
 }
 
 /**
- * Adjusts link to point to a top page, converting URL from "base/path#tag" to "base#path~tag". It also
- * sets a data-adjusted attribute on the link, to skip adjustments on future clicks.
+ * Adjusts link to point to a top page, converting URL from "base/path#tag" to "base#path~tag".
  */
 function adjustLink(linkEl) {
 	var relPath = getRelPath('/', linkEl.href);
@@ -250,7 +228,7 @@ function cleanUrlPath(relUrl) {
 function initMainWindow() {
 	// wm-toc-button either opens the table of contents in the side-pane, or (on smaller screens)
 	// shows the side-pane as a drop-down.
-	onActivate('#wm-toc-button', function(e) {
+	onActivate('#wm-toc-button', _ => {
 		if (isSmallScreen()) {
 			window.scroll(0,0);
 		}
@@ -261,15 +239,15 @@ function initMainWindow() {
 	window.addEventListener('blur', closeTempItems);
 
 	// Connect up the Back and Forward buttons (if present).
-	onActivate('#hist-back', function(e) { window.history.back(); });
-	onActivate('#hist-fwd', function(e) { window.history.forward(); });
+	onActivate('#hist-back', _ => window.history.back());
+	onActivate('#hist-fwd', _ => window.history.forward());
 
 	// When we click on an opener in the table of contents, open it.
-	onActivate('.wm-toc-pane .wm-toc-opener', function(ele) {
+	onActivate('.wm-toc-pane .wm-toc-opener', ele => {
 		ele.classList.toggle('wm-toc-open');
 		getCollapse(ele.nextElementSibling).toggle();
 	});
-	onActivate('.wm-toc-li', function(ele) {
+	onActivate('.wm-toc-li', ele => {
 		if (!ele.classList.contains('wm-page-toc-opener')) {
 			return;
 		}
@@ -278,15 +256,15 @@ function initMainWindow() {
 			return;
 		}
 		showPageToc = !showPageToc;
-		toggleClass(ele, 'wm-page-toc-open', showPageToc);
+		ele.classList.toggle('wm-page-toc-open', showPageToc);
 		toggleCollapse(getCollapse(ele.nextElementSibling), showPageToc);
 	});
-	onActivate('.wm-toc-pane a', function() {
+	onActivate('.wm-toc-pane a', () => {
 		document.getElementsByClassName('wm-toc-pane')[0].classList.toggle('wm-toc-triggered');
 	});
 
 	// Once the article loads in the side-pane, close the dropdown.
-	document.getElementsByClassName('wm-article')[0].addEventListener('load', function() {
+	document.getElementsByClassName('wm-article')[0].addEventListener('load', () => {
 		onInnerWindowUpdated();
 
 		document.title = innerWindow.document.title;
@@ -309,9 +287,8 @@ function initMainWindow() {
 	initSearch();
 
 	// Load the iframe now, and whenever we navigate the top frame.
-	setTimeout(function() { updateIframe(false); }, 0);
-	// For our usage, 'popstate' or 'hashchange' would work, but only 'hashchange' works on IE.
-	window.addEventListener('hashchange', function() { updateIframe(false); });
+	setTimeout(() => updateIframe(false), 0);
+	window.addEventListener('hashchange', () => updateIframe(false));
 }
 
 function onInnerWindowUpdated() {
@@ -320,7 +297,7 @@ function onInnerWindowUpdated() {
 }
 
 function onIframeBeforeLoad(url) {
-	forEach(document.getElementsByClassName('wm-current'), function(ele) {
+	forEach(document.getElementsByClassName('wm-current'), ele => {
 		ele.classList.remove('wm-current');
 	});
 	closeTempItems();
@@ -332,8 +309,7 @@ function onIframeBeforeLoad(url) {
 	for (; tocLi && !tocLi.classList.contains('wm-toc-pane'); tocLi = tocLi.parentElement) {
 		if (tocLi.classList.contains('wm-toc-li-nested')) {
 			tocLi.classList.remove('collapsing');
-			tocLi.classList.add('collapse');
-			tocLi.classList.add('show');
+			tocLi.classList.add('collapse', 'show');
 			tocLi.removeAttribute('style');
 			tocLi.previousElementSibling.classList.add('wm-toc-open');
 		}
@@ -342,8 +318,7 @@ function onIframeBeforeLoad(url) {
 
 function getTocLi(url) {
 	var relPath = getRelPath('/', cleanUrlPath(url));
-	var selector = '.wm-article-link[href="' + relPath + '"]';
-	var elem = document.querySelector(selector);
+	var elem = document.querySelector('.wm-article-link[href="' + relPath + '"]');
 	if (elem) {
 		return elem.parentElement;
 	} else {
@@ -382,7 +357,7 @@ function onIframeLoad() {
  * Hides a bootstrap collapsible element, and removes it from DOM once hidden.
  */
 function collapseAndRemove(collapsibleElem) {
-	collapsibleElem.addEventListener('hidden.bs.collapse', function() {
+	collapsibleElem.addEventListener('hidden.bs.collapse', () => {
 		collapsibleElem.parentElement.removeChild(collapsibleElem);
 	});
 	getCollapse(collapsibleElem).hide();
@@ -396,10 +371,10 @@ function renderPageToc(parentElem, pageUrl, pageToc) {
 		li.classList.add('wm-toc-li');
 		var link = document.createElement('a');
 		link.href = pageUrl + tocItem.url.replace('#', '~');
-		link.setAttribute('class', 'wm-article-link wm-page-toc-text');
+		link.classList.add('wm-article-link', 'wm-page-toc-text');
 		link.innerHTML = tocItem.title;
-		li.appendChild(link);
-		ul.appendChild(li);
+		li.append(link);
+		ul.append(li);
 
 		if (tocItem.children) {
 			tocItem.children.forEach(addItem);
@@ -407,21 +382,19 @@ function renderPageToc(parentElem, pageUrl, pageToc) {
 	}
 	pageToc.forEach(addItem);
 
-	forEach(document.getElementsByClassName('wm-page-toc-opener'), function(ele) {
+	forEach(document.getElementsByClassName('wm-page-toc-opener'), ele => {
 		ele.classList.remove('wm-page-toc-open');
 		ele.classList.remove('wm-page-toc-opener');
 	});
-	forEach(document.getElementsByClassName('wm-page-toc'), function(ele) {
-		collapseAndRemove(ele);
-	});
+	forEach(document.getElementsByClassName('wm-page-toc'), collapseAndRemove);
 
 	var li = document.createElement('li');
-	li.setAttribute('class', 'wm-page-toc wm-toc-li-nested collapse');
-	li.appendChild(ul);
+	li.classList.add('wm-page-toc', 'wm-toc-li-nested', 'collapse');
+	li.append(ul);
 	parentElem.insertAdjacentElement('afterend', li);
 
 	parentElem.classList.add('wm-page-toc-opener');
-	toggleClass(parentElem, 'wm-page-toc-open', showPageToc);
+	parentElem.classList.toggle('wm-page-toc-open', showPageToc);
 	toggleCollapse(getCollapse(li), showPageToc);
 }
 
@@ -443,17 +416,15 @@ function initSearch() {
 
 	// Fetch the prebuilt index data, and add to the index.
 	var req = new XMLHttpRequest();
-	req.onreadystatechange = function() {
+	req.onreadystatechange = () => {
 		if (req.readyState === 4) {
 			if (req.status === 200) {
 				var data = JSON.parse(req.responseText);
-				data.docs.forEach(function(doc) {
+				data.docs.forEach(doc => {
 					searchIndex.addDoc(doc);
 				});
 				searchIndexReady = true;
-				var evt = document.createEvent('Event');
-				evt.initEvent('searchIndexReady', true, true);
-				document.dispatchEvent(evt);
+				document.dispatchEvent(new Event('searchIndexReady'));
 			}
 		}
 	};
@@ -474,7 +445,7 @@ function initSearch() {
 		return show;
 	}
 
-	searchBox.addEventListener('click', function(e) {
+	searchBox.addEventListener('click', e => {
 		if (!searchResults.classList.contains('show')) {
 			if (showSearchResults()) {
 				e.stopPropagation();
@@ -483,18 +454,18 @@ function initSearch() {
 	});
 
 	// Search automatically and show results on keyup event.
-	searchBox.addEventListener('keyup', function(e) {
+	searchBox.addEventListener('keyup', e => {
 		var show = (e.which !== Keys.ESCAPE && e.which !== Keys.ENTER);
 		showSearchResults(show);
 	});
 
 	// Open the search box (and run the search) on up/down arrow keys.
-	searchBox.addEventListener('keydown', function(e) {
+	searchBox.addEventListener('keydown', e => {
 		if (e.which === Keys.UP || e.which === Keys.DOWN) {
 			if (showSearchResults()) {
 				e.stopPropagation();
 				e.preventDefault();
-				setTimeout(function() {
+				setTimeout(() => {
 					var results = searchResults.getElementsByTagName('a');
 					if (e.which === Keys.UP) {
 						results[results.length - 1].focus();
@@ -506,7 +477,7 @@ function initSearch() {
 		}
 	});
 
-	searchResults.addEventListener('keydown', function(e) {
+	searchResults.addEventListener('keydown', e => {
 		if (e.which !== Keys.ENTER) {
 			searchBox.focus();
 		}
@@ -554,7 +525,7 @@ function doSearch(options) {
 	// If the index isn't ready, wait for it, and search again when ready.
 	if (!searchIndexReady) {
 		resultsElem.innerHTML = '<a class="dropdown-item disabled">SEARCHING...</a>';
-		document.addEventListener('searchIndexReady', function() { doSearch(options) }, { once: true });
+		document.addEventListener('searchIndexReady', () => doSearch(options), { once: true });
 		return;
 	}
 
@@ -565,7 +536,7 @@ function doSearch(options) {
 	if (query === '') { return; }
 
 	var results = searchIndex.search(query, {
-		fields: { title: {boost: 10}, text: { boost: 1 } },
+		fields: { title: { boost: 10 }, text: { boost: 1 } },
 		expand: true,
 		bool: "AND"
 	});
@@ -584,12 +555,11 @@ function doSearch(options) {
 			header.innerHTML = doc.title;
 			var text = document.createElement('p');
 			text.innerHTML = snippet;
-			item.appendChild(header);
-			item.appendChild(text);
-			resultsElem.appendChild(item);
+			item.append(header, text);
+			resultsElem.append(item);
 		}
 		if (limit != 0) {
-			Array.from(resultsElem.getElementsByTagName('a')).forEach(adjustLink);
+			forEach(resultsElem.getElementsByTagName('a'), adjustLink);
 		}
 		if (limit) {
 			var divider = document.createElement('div');
@@ -602,7 +572,7 @@ function doSearch(options) {
 			allResults.setAttribute('target', 'article');
 			allResults.href = base_url + '/search.html?q=' + query;
 			allResults.innerHTML = 'SEE ALL RESULTS';
-			resultsElem.appendChild(allResults);
+			resultsElem.append(allResults);
 		}
 	} else {
 		resultsElem.innerHTML = '<span class="dropdown-item-text">NO RESULTS FOUND</span>';
@@ -610,7 +580,7 @@ function doSearch(options) {
 }
 
 function pathJoin(prefix, suffix) {
-	var nPrefix = endsWith(prefix, "/") ? prefix.slice(0, -1) : prefix;
-	var nSuffix = startsWith(suffix, "/") ? suffix.slice(1) : suffix;
-	return nPrefix + "/" + nSuffix;
+	var nPrefix = prefix.endsWith('/') ? prefix.slice(0, -1) : prefix;
+	var nSuffix = suffix.startsWith('/') ? suffix.slice(1) : suffix;
+	return nPrefix + '/' + nSuffix;
 }
