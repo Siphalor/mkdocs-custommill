@@ -7,13 +7,19 @@
 Another iteration on the awesome [Windmill theme](https://github.com/gristlabs/mkdocs-windmill) for MkDocs. This is permitted by the MIT License.
 
 Highlights:
-- Convenient navigation for larger documentation projects.
-- Retains state of the navigation menu across page transitions.
-- Deep nesting of documentation folders
-- Search with term highlighting.
-- User may search in a quick dropdown or load results in a full page.
-- Default mkdocs theme within pages, including syntax highlighting.
-- Custom coloring through sass
+- Clean navigation for large documentation projects
+- Retains the state of the menu across page transitions
+- Versatile search with term highlighting in a quick search and on its own page
+- Supports syntax highlighting within pages
+- Deep nesting of pages in folders
+
+## Improvements over Windmill
+
+- Customizable colors!
+- Customizable links in the navigation menu
+- A lot of small stylistic and design fixes
+- Better search result listing
+- Bootstrap 5 and no more jQuery
 
 ## Quick start
 
