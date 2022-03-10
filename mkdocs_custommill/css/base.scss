@@ -355,7 +355,8 @@ $sel: '.wm-toc-pane';
 .wm-toc-pane, .wm-page-content, #mkdocs-search-results {
 	a, a:hover, a:focus, a:visited {
 		color: $main-color;
-		text-decoration: none;
+		text-decoration-color: $main-color;
+		text-decoration-line: none;
 		outline: none;
 	}
 	a:hover, a:focus {
@@ -370,6 +371,14 @@ $sel: '.wm-toc-pane';
 	}
 	a:focus {
 		text-decoration-style: dotted;
+	}
+}
+
+#mkdocs-search-results {
+	a, a:hover, a:focus, a:visited {
+		&:not(#search-show-all) {
+			color: $body-color;
+		}
 	}
 }
 
