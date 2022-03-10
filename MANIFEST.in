@@ -5,7 +5,7 @@ recursive-include mkdocs_custommill/js *.js
 graft mkdocs_custommill/webfonts
 
 include mkdocs_custommill/bootstrap/dist/css/bootstrap.min.css
-include mkdocs_custommill/bootstrap/dist/js/bootstrap.min.css
+include mkdocs_custommill/bootstrap/dist/js/bootstrap.min.js
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
