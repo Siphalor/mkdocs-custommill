@@ -52,7 +52,7 @@ plugins:
 
 extra:
   history_buttons: false
-  version: v1.2.7
+  version: v1.3.0
   nav_links:
     - icon: twitter
       icon_type: brand
