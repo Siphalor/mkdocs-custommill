@@ -549,15 +549,14 @@ function doSearch(options) {
 		var len = Math.min(results.length, limit || Infinity);
 		for (var i = 0; i < len; i++) {
 			var doc = searchIndex.documentStore.getDoc(results[i].ref);
-			var snippet = snippetBuilder.getSnippet(doc.text, snippetLen);
 			var item = document.createElement('a');
 			item.classList.add('dropdown-item');
 			item.setAttribute('href', limit == 0 ? doc.location : pathJoin(base_url, doc.location));
 			var header = document.createElement('h6');
 			header.classList.add('dropdown-header');
-			header.innerHTML = doc.title;
+			header.innerHTML = snippetBuilder.getSnippet(doc.title, snippetLen);
 			var text = document.createElement('p');
-			text.innerHTML = snippet;
+			text.innerHTML = snippetBuilder.getSnippet(doc.text, snippetLen);
 			item.append(header, text);
 			resultsElem.append(item);
 		}
