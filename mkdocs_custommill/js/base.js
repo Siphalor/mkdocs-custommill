@@ -203,8 +203,8 @@ function closeTempItems() {
 		forEach(document.getElementsByClassName('wm-toc-triggered'), ele => {
 			ele.classList.remove('wm-toc-triggered');
 		});
+		getCollapse(document.getElementById('mkdocs-search-results')).hide();
 	}
-	getCollapse(document.getElementById('mkdocs-search-results')).hide();
 }
 
 /**
