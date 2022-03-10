@@ -133,7 +133,10 @@ function getAbsUrl(separator, relPath) {
  */
 function updateIframe(enableForwardNav) {
 	// Grey out the "forward" button if we don't expect 'forward' to work.
-	document.getElementById('hist-fwd').classList.toggle('bg-gray', !enableForwardNav);
+	var histBtn = document.getElementById('hist-fwd');
+	if (histBtn) {
+		histBtn.classList.toggle('bg-gray', !enableForwardNav);
+	}
 
 	var targetRelPath = (getRelPath('#', outerWindow.location.href) || "").replace("~", "#");
 	var targetIframeUrl;
