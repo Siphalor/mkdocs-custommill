@@ -18,11 +18,39 @@ var Keys = {
 	UP:     38,
 	DOWN:   40,
 };
+var TABLE_CLASSES = [ 'table', 'table-striped', 'table-hover', 'table-bordered', 'table-condensed' ];
+
+function onReady(doc, fun) {
+	if (doc.readyState === 'interactive' || doc.readyState === 'complete') {
+		fun();
+	} else {
+		doc.addEventListener('DOMContentLoaded', fun);
+	}
+}
+
+function forEach(iterable, fun) {
+	for (var i = 0; i < iterable.length; i++) {
+		fun(iterable[i]);
+	}
+}
+
+function toggleCollapse(collapse, value) {
+	if (value) {
+		collapse.show();
+	} else {
+		collapse.hide();
+	}
+}
+
+function getCollapse(ele) {
+	var collapse = bootstrap.Collapse.getInstance(ele);
+	return collapse ? collapse : new bootstrap.Collapse(ele, { toggle: false });
+}
 
 if (is_outer_page) {
 	// Main window.
-	$(document).ready(function() {
-		innerWindow = $('.wm-article')[0].contentWindow;
+	onReady(document, () => {
+		innerWindow = document.getElementsByClassName('wm-article')[0].contentWindow;
 		initMainWindow();
 		ensureIframeLoaded();
 	});
@@ -42,29 +70,28 @@ if (is_outer_page) {
 
 	// Other initialization of iframe contents.
 	hljs.initHighlightingOnLoad();
-	$(document).ready(function() {
-		$('table').addClass('table table-striped table-hover table-bordered table-condensed');
-		$('a').filter(function(i, val) {
-			val = $(val);
-			return val.attr("href") && val.attr("href").match(/^\w+:\/\//);
-		}).attr("target", "_blank");
+	onReady(document, function() {
+		forEach(document.getElementsByTagName('table'), table => {
+			TABLE_CLASSES.forEach(function(clazz) { table.classList.add(clazz); });
+		});
+		forEach(document.querySelectorAll('a[href*="://"]'), link => {
+			link.target = '_blank';
+		});
 	});
 }
-
-function startsWith(str, prefix) { return str.lastIndexOf(prefix, 0) === 0; }
-function endsWith(str, suffix) { return str.indexOf(suffix, str.length - suffix.length) !== -1; }
 
 /**
  * Creates event handlers for click and the enter key
  */
-function onActivate(sel, arg1, arg2) {
-	if (arg2 === undefined) {
-		$(sel).on('click', function(){ arg1($(this)); });
-		$(sel).on('keydown', function(e){ if(e.which === 13 || e.which === 32) arg1($(this)); });
-	} else {
-		$(sel).on('click', arg1, function(){ arg2($(this)); });
-		$(sel).on('keydown', arg1, function(e){ if(e.which === 13 || e.which === 32) arg2($(this)); });
-	}
+function onActivate(sel, fun) {
+	forEach(document.querySelectorAll(sel), ele => {
+		ele.addEventListener('click', () => fun(ele));
+		ele.addEventListener('keydown', e => {
+			if (e.which === 13 || e.which === 32) {
+				fun(ele);
+			}
+		});
+	});
 }
 
 /**
@@ -87,15 +114,15 @@ function qualifyUrl(url) {
  * Turns an absolute path to relative, stripping out rootUrl + separator.
  */
 function getRelPath(separator, absUrl) {
-	var prefix = rootUrl + (endsWith(rootUrl, separator) ? '' : separator);
-	return startsWith(absUrl, prefix) ? absUrl.slice(prefix.length) : null;
+	var prefix = rootUrl + (rootUrl.endsWith(separator) ? '' : separator);
+	return absUrl.startsWith(prefix) ? absUrl.slice(prefix.length) : null;
 }
 
 /**
  * Turns a relative path to absolute, adding a prefix of rootUrl + separator.
  */
 function getAbsUrl(separator, relPath) {
-	var sep = endsWith(rootUrl, separator) ? '' : separator;
+	var sep = rootUrl.endsWith(separator) ? '' : separator;
 	return relPath === null ? null : rootUrl + sep + relPath;
 }
 
@@ -106,7 +133,10 @@ function getAbsUrl(separator, relPath) {
  */
 function updateIframe(enableForwardNav) {
 	// Grey out the "forward" button if we don't expect 'forward' to work.
-	$('#hist-fwd').toggleClass('greybtn', !enableForwardNav);
+	var histBtn = document.getElementById('hist-fwd');
+	if (histBtn) {
+		histBtn.classList.toggle('bg-gray', !enableForwardNav);
+	}
 
 	var targetRelPath = (getRelPath('#', outerWindow.location.href) || "").replace("~", "#");
 	var targetIframeUrl;
@@ -143,13 +173,7 @@ function _safeGetLocationHref(location) {
  * Returns the value of the given parameter in the URL's query portion.
  */
 function getParam(key) {
-	var params = window.location.search.substring(1).split('&');
-	for (var i = 0; i < params.length; i++) {
-		var param = params[i].split('=');
-		if (param[0] === key) {
-			return decodeURIComponent(param[1].replace(/\+/g, '%20'));
-		}
-	}
+	return new URLSearchParams(document.location.search).get(key);
 }
 
 /**
@@ -158,18 +182,24 @@ function getParam(key) {
  */
 function onResize() {
 	if (isSmallScreen()) {
-		if ($('.wm-article').attr('scrolling') !== 'no') {
-			$('#wm-search-form').removeClass('show');
-			$('.wm-article').attr('scrolling', 'no');
+		var article = document.getElementsByClassName('wm-article')[0];
+		if (article.getAttribute('scrolling') !== 'no') {
+			document.getElementById('wm-search-form').classList.remove('show');
+			article.setAttribute('scrolling', 'no');
 		}
-		$('.wm-toc-pane').css('top', $('.navbar').height());
-		$('.wm-content-pane').height(innerWindow.document.body.offsetHeight + 20);
+		document.getElementsByClassName('wm-content-pane')[0].style.height = innerWindow.document.body.offsetHeight + 20 + 'px';
 	} else {
-		$('#wm-search-form').addClass('show');
-		$('.wm-content-pane').height('');
-		$('.wm-article').attr('scrolling', 'auto');
-		$('.wm-toc-pane').css('top', 0);
+		document.getElementById('wm-search-form').classList.add('show');
+		document.getElementsByClassName('wm-content-pane')[0].removeAttribute('style');
+		document.getElementsByClassName('wm-article')[0].setAttribute('scrolling', 'auto');
 	}
+}
+
+/**
+ * Gets the dropdown for the search results menu
+ */
+function getSearchResultsDropdown() {
+	return bootstrap.Dropdown.getOrCreateInstance(document.getElementById('mkdocs-search-results-toggle'));
 }
 
 /**
@@ -177,14 +207,15 @@ function onResize() {
  */
 function closeTempItems() {
 	if (isSmallScreen()) {
-		$('.wm-toc-triggered').removeClass('wm-toc-triggered');
+		forEach(document.getElementsByClassName('wm-toc-triggered'), ele => {
+			ele.classList.remove('wm-toc-triggered');
+		});
+		getSearchResultsDropdown().hide();
 	}
-	$('#mkdocs-search-container').dropdown('hide');
 }
 
 /**
- * Adjusts link to point to a top page, converting URL from "base/path" to "base#path". It also
- * sets a data-adjusted attribute on the link, to skip adjustments on future clicks.
+ * Adjusts link to point to a top page, converting URL from "base/path#tag" to "base#path~tag".
  */
 function adjustLink(linkEl) {
 	var relPath = getRelPath('/', linkEl.href);
@@ -207,40 +238,43 @@ function cleanUrlPath(relUrl) {
 function initMainWindow() {
 	// wm-toc-button either opens the table of contents in the side-pane, or (on smaller screens)
 	// shows the side-pane as a drop-down.
-	$('#wm-toc-button').on('click', function(e) {
+	onActivate('#wm-toc-button', _ => {
 		if (isSmallScreen()) {
 			window.scroll(0,0);
 		}
-		$('#main-content').toggleClass('wm-toc-triggered');
+		document.getElementById('main-content').classList.toggle('wm-toc-triggered');
 	});
 
-	$(window).on('resize', onResize);
+	window.addEventListener('resize', onResize);
+	window.addEventListener('blur', closeTempItems);
 
 	// Connect up the Back and Forward buttons (if present).
-	$('#hist-back').on('click', function(e) { window.history.back(); });
-	$('#hist-fwd').on('click', function(e) { window.history.forward(); });
-
-	// When the side-pane is a dropdown, hide it on click-away.
-	$(window).on('blur', closeTempItems);
+	onActivate('#hist-back', _ => window.history.back());
+	onActivate('#hist-fwd', _ => window.history.forward());
 
 	// When we click on an opener in the table of contents, open it.
-	onActivate('.wm-toc-pane', '.wm-toc-opener', ele => {
-		ele.toggleClass('wm-toc-open');
-		ele.next('.wm-toc-li-nested').collapse('toggle');
+	onActivate('.wm-toc-pane .wm-toc-opener', ele => {
+		ele.classList.toggle('wm-toc-open');
+		getCollapse(ele.nextElementSibling).toggle();
 	});
-	onActivate('.wm-toc-pane', '.wm-page-toc-opener', ele => {
+	onActivate('.wm-toc-li', ele => {
+		if (!ele.classList.contains('wm-page-toc-opener')) {
+			return;
+		}
 		// Ignore clicks while transitioning.
-		if (ele.next('.wm-page-toc').hasClass('collapsing')) { return; }
+		if (ele.nextElementSibling.classList.contains('collapsing')) {
+			return;
+		}
 		showPageToc = !showPageToc;
-		ele.toggleClass('wm-page-toc-open', showPageToc);
-		ele.next('.wm-page-toc').collapse(showPageToc ? 'show' : 'hide');
+		ele.classList.toggle('wm-page-toc-open', showPageToc);
+		toggleCollapse(getCollapse(ele.nextElementSibling), showPageToc);
 	});
-	onActivate('.wm-toc-pane', 'a', () => {
-		$('.wm-toc-pane').toggleClass('wm-toc-triggered');
+	onActivate('.wm-toc-pane a', () => {
+		document.getElementsByClassName('wm-toc-pane')[0].classList.toggle('wm-toc-triggered');
 	});
 
 	// Once the article loads in the side-pane, close the dropdown.
-	$('.wm-article').on('load', function() {
+	document.getElementsByClassName('wm-article')[0].addEventListener('load', () => {
 		onInnerWindowUpdated();
 
 		document.title = innerWindow.document.title;
@@ -263,32 +297,43 @@ function initMainWindow() {
 	initSearch();
 
 	// Load the iframe now, and whenever we navigate the top frame.
-	setTimeout(function() { updateIframe(false); }, 0);
-	// For our usage, 'popstate' or 'hashchange' would work, but only 'hashchange' works on IE.
-	$(window).on('hashchange', function() { updateIframe(true); });
+	setTimeout(() => updateIframe(false), 0);
+	window.addEventListener('hashchange', () => updateIframe(false));
 }
 
 function onInnerWindowUpdated() {
 	window.history.replaceState(null, '', getAbsUrl('#', getRelPath('/', innerWindow.location.href).replace('#', '~')));
-	$('#mkdocs-search-results').collapse('hide');
+	getSearchResultsDropdown().hide();
 }
 
 function onIframeBeforeLoad(url) {
-	$('.wm-current').removeClass('wm-current');
+	forEach(document.getElementsByClassName('wm-current'), ele => {
+		ele.classList.remove('wm-current');
+	});
 	closeTempItems();
 
 	var tocLi = getTocLi(url);
-	tocLi.addClass('wm-current');
-	tocLi.parents('.wm-toc-li-nested')
-	// It's better to open parent items immediately without a transition.
-		.removeClass('collapsing').addClass('collapse show').height('')
-		.prev('.wm-toc-opener').addClass('wm-toc-open');
+	if (tocLi) {
+		tocLi.classList.add('wm-current');
+	}
+	for (; tocLi && !tocLi.classList.contains('wm-toc-pane'); tocLi = tocLi.parentElement) {
+		if (tocLi.classList.contains('wm-toc-li-nested')) {
+			tocLi.classList.remove('collapsing');
+			tocLi.classList.add('collapse', 'show');
+			tocLi.removeAttribute('style');
+			tocLi.previousElementSibling.classList.add('wm-toc-open');
+		}
+	}
 }
 
 function getTocLi(url) {
 	var relPath = getRelPath('/', cleanUrlPath(url));
-	var selector = '.wm-article-link[href="' + relPath + '"]';
-	return $(selector).closest('.wm-toc-li');
+	var elem = document.querySelector('.wm-article-link[href="' + relPath + '"]');
+	if (elem) {
+		return elem.parentElement;
+	} else {
+		return null;
+	}
 }
 
 var _deferIframeLoad = false;
@@ -305,16 +350,15 @@ function onIframeLoad() {
 	if (!innerWindow) { _deferIframeLoad = true; return; }
 	var url = innerWindow.location.href;
 	onIframeBeforeLoad(url);
-	$(innerWindow).on('hashchange', onInnerWindowUpdated);
+	innerWindow.addEventListener('hashchange', onInnerWindowUpdated);
+	innerWindow.addEventListener('click', () => getSearchResultsDropdown().hide(), { capture: true });
 
 	if (innerWindow.pageToc) {
 		var relPath = getAbsUrl('#', getRelPath('/', cleanUrlPath(url)));
 		var li = getTocLi(url);
-		if (!li.hasClass('wm-page-toc-open')) {
+		if (!li.classList.contains('wm-page-toc-open')) {
 			renderPageToc(li, relPath, innerWindow.pageToc);
 		}
-	} else {
-		//collapseAndRemove($('.wm-page-toc'));
 	}
 
 	innerWindow.focus();
@@ -324,32 +368,45 @@ function onIframeLoad() {
  * Hides a bootstrap collapsible element, and removes it from DOM once hidden.
  */
 function collapseAndRemove(collapsibleElem) {
-	collapsibleElem.on('hidden.bs.collapse', function() {
-		collapsibleElem.remove();
-	})
-	.collapse('hide');
+	collapsibleElem.addEventListener('hidden.bs.collapse', () => {
+		collapsibleElem.parentElement.removeChild(collapsibleElem);
+	});
+	getCollapse(collapsibleElem).hide();
 }
 
 function renderPageToc(parentElem, pageUrl, pageToc) {
-	var ul = $('<ul class="wm-page-toc-tree">');
+	var ul = document.createElement('ul');
+	ul.classList.add('wm-page-toc-tree');
 	function addItem(tocItem) {
-		ul.append($('<li class="wm-toc-li">')
-			.append($('<a class="wm-article-link wm-page-toc-text">')
-				.attr('href', pageUrl + tocItem.url.replace("#", "~"))
-				.attr('data-cm-adjusted', 'done')
-				.text(tocItem.title)));
+		var li = document.createElement('li');
+		li.classList.add('wm-toc-li');
+		var link = document.createElement('a');
+		link.href = pageUrl + tocItem.url.replace('#', '~');
+		link.classList.add('wm-article-link', 'wm-page-toc-text');
+		link.innerHTML = tocItem.title;
+		li.append(link);
+		ul.append(li);
+
 		if (tocItem.children) {
 			tocItem.children.forEach(addItem);
 		}
 	}
 	pageToc.forEach(addItem);
 
-	$('.wm-page-toc-opener').removeClass('wm-page-toc-opener wm-page-toc-open');
-	collapseAndRemove($('.wm-page-toc'));
+	forEach(document.getElementsByClassName('wm-page-toc-opener'), ele => {
+		ele.classList.remove('wm-page-toc-open');
+		ele.classList.remove('wm-page-toc-opener');
+	});
+	forEach(document.getElementsByClassName('wm-page-toc'), collapseAndRemove);
 
-	parentElem.addClass('wm-page-toc-opener').toggleClass('wm-page-toc-open', showPageToc);
-	$('<li class="wm-page-toc wm-toc-li-nested collapse">').append(ul).insertAfter(parentElem)
-		.collapse(showPageToc ? 'show' : 'hide');
+	var li = document.createElement('li');
+	li.classList.add('wm-page-toc', 'wm-toc-li-nested', 'collapse');
+	li.append(ul);
+	parentElem.insertAdjacentElement('afterend', li);
+
+	parentElem.classList.add('wm-page-toc-opener');
+	parentElem.classList.toggle('wm-page-toc-open', showPageToc);
+	toggleCollapse(getCollapse(li), showPageToc);
 }
 
 var searchIndexReady = false;
@@ -365,35 +422,42 @@ function initSearch() {
 		this.addField('text');
 	});
 
-	var searchBox = $('#mkdocs-search-query');
-	var searchResults = $('#mkdocs-search-results');
+	var searchBox = document.getElementById('mkdocs-search-query');
+	var searchResults = document.getElementById('mkdocs-search-results');
 
 	// Fetch the prebuilt index data, and add to the index.
-	$.getJSON(base_url + '/search/search_index.json')
-		.done(function(data) {
-			data.docs.forEach(function(doc) {
-				searchIndex.addDoc(doc);
-			});
-			searchIndexReady = true;
-			$(document).trigger('searchIndexReady');
-		});
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = () => {
+		if (req.readyState === 4) {
+			if (req.status === 200) {
+				var data = JSON.parse(req.responseText);
+				data.docs.forEach(doc => {
+					searchIndex.addDoc(doc);
+				});
+				searchIndexReady = true;
+				document.dispatchEvent(new Event('searchIndexReady'));
+			}
+		}
+	};
+	req.open('GET', base_url + '/search/search_index.json', true);
+	req.send();
 
 	function showSearchResults(optShow) {
-		var show = (optShow === false ? false : Boolean(searchBox.val()));
+		var show = (optShow === false ? false : Boolean(searchBox.value));
 		if (show) {
 			doSearch({
 				resultsElem: searchResults,
-				query: searchBox.val(),
+				query: searchBox.value,
 				snippetLen: 100,
 				limit: 10
 			});
 		}
-		searchResults.collapse(show ? 'show' : 'hide');
+		toggleCollapse(getSearchResultsDropdown(), show);
 		return show;
 	}
 
-	searchBox.on('click', function(e) {
-		if (!searchResults.hasClass('show')) {
+	searchBox.addEventListener('click', e => {
+		if (!searchResults.classList.contains('show')) {
 			if (showSearchResults()) {
 				e.stopPropagation();
 			}
@@ -401,38 +465,31 @@ function initSearch() {
 	});
 
 	// Search automatically and show results on keyup event.
-	searchBox.on('keyup', function(e) {
+	searchBox.addEventListener('keyup', e => {
 		var show = (e.which !== Keys.ESCAPE && e.which !== Keys.ENTER);
 		showSearchResults(show);
 	});
 
 	// Open the search box (and run the search) on up/down arrow keys.
-	searchBox.on('keydown', function(e) {
+	searchBox.addEventListener('keydown', e => {
 		if (e.which === Keys.UP || e.which === Keys.DOWN) {
 			if (showSearchResults()) {
 				e.stopPropagation();
 				e.preventDefault();
-				setTimeout(function() {
-					searchResults.find('a').eq(e.which === Keys.UP ? -1 : 0).focus();
+				setTimeout(() => {
+					var results = searchResults.getElementsByTagName('a');
+					if (e.which === Keys.UP) {
+						results[results.length - 1].focus();
+					} else {
+						results[0].focus();
+					}
 				}, 0);
 			}
 		}
 	});
 
-	searchResults.on('keydown', function(e) {
-		if (e.which === Keys.UP || e.which === Keys.DOWN) {
-			if (searchResults.find('a').eq(e.which === Keys.UP ? 0 : -1)[0] === e.target) {
-				searchBox.focus();
-				e.stopPropagation();
-				e.preventDefault();
-			} else {
-				if (e.which === Keys.UP) {
-					$(e.target).prevAll('a')[0].focus();
-				} else {
-					$(e.target).nextAll('a')[0].focus();
-				}
-			}
-		} else if (e.which !== Keys.ENTER) {
+	searchResults.addEventListener('keydown', e => {
+		if (e.which !== Keys.ENTER) {
 			searchBox.focus();
 		}
 	});
@@ -474,12 +531,12 @@ SnippetBuilder.prototype.getSnippet = function(text, len) {
  */
 function doSearch(options) {
 	var resultsElem = options.resultsElem;
-	resultsElem.empty();
+	resultsElem.innerHTML = '';
 
 	// If the index isn't ready, wait for it, and search again when ready.
 	if (!searchIndexReady) {
-		resultsElem.append($('<a class="dropdown-item disabled">SEARCHING...</a>'));
-		$(document).one('searchIndexReady', function() { doSearch(options); });
+		resultsElem.innerHTML = '<a class="dropdown-item disabled">SEARCHING...</a>';
+		document.addEventListener('searchIndexReady', () => doSearch(options), { once: true });
 		return;
 	}
 
@@ -490,7 +547,7 @@ function doSearch(options) {
 	if (query === '') { return; }
 
 	var results = searchIndex.search(query, {
-		fields: { title: {boost: 10}, text: { boost: 1 } },
+		fields: { title: { boost: 10 }, text: { boost: 1 } },
 		expand: true,
 		bool: "AND"
 	});
@@ -498,31 +555,49 @@ function doSearch(options) {
 	var snippetBuilder = new SnippetBuilder(query);
 	if (results.length > 0){
 		var len = Math.min(results.length, limit || Infinity);
+		var lastDoc; // Used to check for duplicate results due to nesting of headings
 		for (var i = 0; i < len; i++) {
 			var doc = searchIndex.documentStore.getDoc(results[i].ref);
-			var snippet = snippetBuilder.getSnippet(doc.text, snippetLen);
-			resultsElem.append(
-				$('<a class="dropdown-item">').attr('href', limit == 0 ? doc.location : pathJoin(base_url, doc.location))
-				.append($('<h6 class="dropdown-header">').text(doc.title))
-				.append($('<p>').html(snippet))
-			);
+
+			if (lastDoc && lastDoc.location.startsWith(doc.location) && doc.text.includes(lastDoc.text)) {
+				continue;
+			}
+			lastDoc = doc;
+
+			var item = document.createElement('a');
+			item.classList.add('dropdown-item');
+			item.setAttribute('href', limit == 0 ? doc.location : pathJoin(base_url, doc.location));
+			var header = document.createElement('h6');
+			header.classList.add('dropdown-header');
+			header.innerHTML = snippetBuilder.getSnippet(doc.title, snippetLen);
+			var text = document.createElement('p');
+			text.innerHTML = snippetBuilder.getSnippet(doc.text, snippetLen);
+			item.append(header, text);
+			resultsElem.append(item);
 		}
 		if (limit != 0) {
-			resultsElem.find('a').each(function() { adjustLink(this); });
+			forEach(resultsElem.getElementsByTagName('a'), adjustLink);
 		}
 		if (limit) {
-			resultsElem.append($('<div class="dropdown-divider" role="separator"></div>'));
-			resultsElem.append($(
-				'<a class="dropdown-item" href="' + base_url + '/search.html?q=' + query + '" id="search-show-all" target="article">' +
-				'SEE ALL RESULTS</a>'));
+			var divider = document.createElement('div');
+			divider.classList.add('dropdown-divider');
+			divider.setAttribute('role', 'separator');
+			resultsElem.appendChild(divider);
+			var allResults = document.createElement('a');
+			allResults.classList.add('dropdown-item');
+			allResults.id = 'search-show-all';
+			allResults.setAttribute('target', 'article');
+			allResults.href = base_url + '/search.html?q=' + query;
+			allResults.innerHTML = 'SEE ALL RESULTS';
+			resultsElem.append(allResults);
 		}
 	} else {
-		resultsElem.append($('<a class="dropdown-item disabled">NO RESULTS FOUND</a>'));
+		resultsElem.innerHTML = '<span class="dropdown-item-text">NO RESULTS FOUND</span>';
 	}
 }
 
 function pathJoin(prefix, suffix) {
-	var nPrefix = endsWith(prefix, "/") ? prefix.slice(0, -1) : prefix;
-	var nSuffix = startsWith(suffix, "/") ? suffix.slice(1) : suffix;
-	return nPrefix + "/" + nSuffix;
+	var nPrefix = prefix.endsWith('/') ? prefix.slice(0, -1) : prefix;
+	var nSuffix = suffix.startsWith('/') ? suffix.slice(1) : suffix;
+	return nPrefix + '/' + nSuffix;
 }
